@@ -25,6 +25,7 @@ const routes = [
 
 const router = createMemoryRouter(routes, {
   initialEntries: ["/"],
+  basename: process.env.PUBLIC_URL
 });
 
 function App() {
