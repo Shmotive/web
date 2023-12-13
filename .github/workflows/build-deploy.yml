@@ -7,10 +7,7 @@ on:
   pull_request:
     branches:
       - main
-      
-permissions:
-  actions: write
-  
+
 jobs:
   build:
     name: Build
@@ -47,6 +44,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+
+    permissions:
+      actions: write-all
 
     steps:
       - name: Downloading artifact
