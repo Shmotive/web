@@ -46,7 +46,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     permissions:
-      actions: write-all
+      actions: write
 
     steps:
       - name: Downloading artifact
