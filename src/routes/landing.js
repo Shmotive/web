@@ -23,6 +23,8 @@ export default function LoginPage() {
 
 	const handleFormSubmit = async (e) => {
 
+		e.preventDefault();
+
 		const guestName = guestNameRef.current.value;
 		const code = codeRef.current.value || "ABCD";
 		// we can use useRef in order to send the form's (guestname) value
