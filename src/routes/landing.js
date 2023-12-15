@@ -1,11 +1,11 @@
 import { Outlet } from "react-router"
 import "./landing.css";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate, useLoaderData } from "react-router-dom";
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { getAuth, onAuthStateChanged, signInAnonymously } from "@firebase/auth";
+import { deleteUser, getAuth, onAuthStateChanged, signInAnonymously } from "@firebase/auth";
 import auth from "../firebase-config"
 import { FormLabel, Image } from "react-bootstrap";
 
@@ -15,10 +15,24 @@ export default function LoginPage() {
 	const guestNameRef = useRef();
 	const codeRef = useRef('');
 	const [isCreate, setIsCreate] = useState(true);
+	const user = anon.currentUser;
 
+	useEffect(() => {
+		console.log('user: ', user);
+	}, [user])
 
-	function generateLobbyCode() {
-		// some random 4-character string generator
+	function signOut() {
+		if (user.isAnonymous) {
+			// delete and sign out
+			deleteUser(user).then(() => {
+				console.log("signed out and deleted anon");
+				console.log(user);
+			}).catch(console.error);
+		} else {
+			anon.signOut().then(() => {
+				console.log("signed out")
+			}).catch(console.error);
+		}
 	}
 
 	const handleFormSubmit = async (e) => {
@@ -29,31 +43,33 @@ export default function LoginPage() {
 		// this means we don't need to track the changes of the input using
 		// state, so the component doesn't needlessly rerender
 
+		if (!user) {
+			signInAnonymously(anon)
+				.then(() => {
+					// Signed in..
+					// step1: generate the lobby code: setCode(generateLobbyCode());
+					console.log('code generated')
+	
+					// step2: route to /lobby/:code in one of several ways:
+	
+					// using redirect, usenavigate, or usehistory -- all from reactrouter
+				})
+				.catch((error) => {
+					const errorCode = error.code;
+					const errorMessage = error.message;
+					console.log(errorCode, errorMessage)
+					return
+				});
+		} 
+		navigate('/lobby/' + code, { state: { guestName, code } })
 
-		signInAnonymously(anon)
-			.then(() => {
-				// Signed in..
-				// step1: generate the lobby code: setCode(generateLobbyCode());
-				console.log('code generated')
-
-				// step2: route to /lobby/:code in one of several ways:
-
-				// using redirect, usenavigate, or usehistory -- all from reactrouter
-				navigate('/lobby/' + code, { state: { guestName, code } })
-			})
-			.catch((error) => {
-				const errorCode = error.code;
-				const errorMessage = error.message;
-				console.log(errorCode, errorMessage)
-				// ...
-			});
 	};
 
-	onAuthStateChanged(anon, (user) => {
-		if (user) {
+	onAuthStateChanged(anon, (firebaseUser) => {
+		if (firebaseUser) {
 			// User is signed in, see docs for a list of available properties
 			// https://firebase.google.com/docs/reference/js/auth.user
-			console.log(user.uid);
+			console.log(firebaseUser.uid);
 			// ...
 		} else {
 			// User is signed out
@@ -63,6 +79,7 @@ export default function LoginPage() {
 
 	return <>
 		<div style={{ position: "fixed", right: 0, top: 0, height: "100vh", width: "37vw", zIndex: '1' }}>
+			{user && <Button onClick={signOut}> sign out</Button>}
 			<Card border="dark" style={{ backdropFilter: 'blur(10px)', backgroundColor: '#FFFFFF95', margin: '0', padding: '20px', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)', height: "100vh" }}>
 				<Card.Body style={{ padding: '50px' }}>
 					<Card.Title className="mb-3">What's the Motive?</Card.Title>
