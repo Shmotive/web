@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
-import Root , {loader as rootLoader} from './routes/root';
+import Root , {loader as rootLoader} from './routes/landing';
 import LoginPage, {loader as loginLoader} from './routes/login';
 import LobbyPage, {loader as lobbyLoader} from './routes/lobby';
 

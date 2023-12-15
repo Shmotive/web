@@ -1,0 +1,12 @@
+body {
+    background-image: url('../assets/background_image.png');
+    background-repeat: no-repeat;
+    height: 100vh;
+    background-size: contain;
+    background-position: 25% 50%;
+}
+
+.link-button:hover {
+    color: red;
+    cursor: pointer;
+}
