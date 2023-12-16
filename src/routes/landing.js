@@ -15,7 +15,7 @@ export default function LoginPage() {
 	const guestNameRef = useRef();
 	const codeRef = useRef('');
 	const [isCreate, setIsCreate] = useState(true);
-	const user = anon.currentUser;
+	const [user, setUser] = useState(anon.currentUser);
 
 	useEffect(() => {
 		console.log('user: ', user);
@@ -27,11 +27,14 @@ export default function LoginPage() {
 			deleteUser(user).then(() => {
 				console.log("signed out and deleted anon");
 				console.log(user);
-			}).catch(console.error);
+			}).catch((error) => {
+				console.log(error)});
 		} else {
 			anon.signOut().then(() => {
-				console.log("signed out")
-			}).catch(console.error);
+				console.log("signed out");
+			}).catch((err) => {
+				console.log(err);
+			});
 		}
 	}
 
@@ -72,8 +75,8 @@ export default function LoginPage() {
 			console.log(firebaseUser.uid);
 			// ...
 		} else {
-			// User is signed out
-			// ...
+			console.log("See you next time!");
+			setUser(null)
 		}
 	});
 
