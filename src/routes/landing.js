@@ -84,17 +84,22 @@ export default function LoginPage() {
 	}, [])
 		
 	return <>
-		<div>
-			<Image className="logo" src={require("../assets/shrug-smiley.jpg")} />
-		</div>
+		
 		<div className="landingBody">
-		<div className="ab1">
-			{user && <Button className="sign-out" onClick={signOut}>Sign out</Button>}
+		<div className="card-container">
+			<div className = "left-col-container">
+				<div><Image className="landing-logo" src={require("../assets/shrug-smiley.jpg")} /></div>
+				<div/>
+			</div>
+			<div/>
 			<Card className="card" border="dark" >
 				<Card.Body className="card-body">
-					<Card.Title className="mb-3">What's the <span className="orangeText">Motive</span>?</Card.Title>
-					<Card.Subtitle className="mb-2 mt-2">Create a Group</Card.Subtitle>
-					<Card.Text>Help decide the best location for everyone.</Card.Text>
+				<div className="button-wrapper">
+        			{user && <Button className="sign-out" onClick={signOut}>Sign out</Button>}
+    			</div>
+					<Card.Title className="whats-the-text">What's the <span className="orangeText">Motive</span>?</Card.Title>
+					<Card.Subtitle className="create-group-text">Create a Group</Card.Subtitle>
+					<Card.Text className="help">Help decide the best location for everyone.</Card.Text>
 					<Form onSubmit={handleFormSubmit}>
 						<Form.Group  controlId="formGuestName">
 							<FormLabel className="form-label"><small>Your Name</small></FormLabel>
