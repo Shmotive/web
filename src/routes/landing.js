@@ -1,7 +1,6 @@
-import { Outlet } from "react-router"
 import "../assets/css/landing.css";
 import React, { useState, useRef, useEffect } from "react";
-import { Link, useNavigate, useLoaderData } from "react-router-dom";
+import { useNavigate, useLoaderData } from "react-router-dom";
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -85,9 +84,12 @@ export default function LoginPage() {
 	}, [])
 		
 	return <>
+		<div>
+			<Image className="logo" src={require("../assets/shrug-smiley.jpg")} />
+		</div>
 		<div className="landingBody">
 		<div className="ab1">
-			{user && <Button onClick={signOut}> sign out</Button>}
+			{user && <Button className="sign-out" onClick={signOut}>Sign out</Button>}
 			<Card className="card" border="dark" >
 				<Card.Body className="card-body">
 					<Card.Title className="mb-3">What's the <span className="orangeText">Motive</span>?</Card.Title>

@@ -15,6 +15,21 @@
     z-index: 1;
 }
 
+.sign-out {
+    position: fixed;
+    top: 0;
+    right: 0;
+    border-radius: 30px;
+    background-color: #F46F60;
+    border: none;
+    color: white;
+    padding: 1vh;
+}
+
+.sign-out:hover {
+    cursor: pointer;
+}
+
 .card {
     backdrop-filter: blur(10px);
     background-color: #FFFFFF95;
@@ -22,6 +37,16 @@
     padding: 20px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     height: 100vh;
+}
+
+.logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-top: 2.5vh;
+    margin-left: 2.5vh;
+    height: 5vh;
+    width: 5vw;
 }
 
 .card-body {
@@ -55,7 +80,7 @@
     width: 100%;
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
     margin-top: 0.2rem;
-    margin-bottom: 0.2rem;
+    margin-bottom: 1rem;
     padding: 5px;
 }
 
