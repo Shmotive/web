@@ -85,7 +85,7 @@ export default function LoginPage() {
 			{user && <Button onClick={signOut}> sign out</Button>}
 			<Card border="dark" style={{ backdropFilter: 'blur(10px)', backgroundColor: '#FFFFFF95', margin: '0', padding: '20px', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)', height: "100vh" }}>
 				<Card.Body style={{ padding: '50px' }}>
-					<Card.Title className="mb-3">What's the Motive?</Card.Title>
+					<Card.Title className="mb-3">What's the <span className="orangeText">Motive</span>?</Card.Title>
 					<Card.Subtitle className="mb-2 mt-2">Create a Group</Card.Subtitle>
 					<Card.Text>Help decide the best location for everyone.</Card.Text>
 					<Form onSubmit={handleFormSubmit}>
