@@ -50,7 +50,7 @@
 }
 
 .card-body {
-    padding: 50px;
+    padding: 8vh;
 }
 
 .form-label {
@@ -64,11 +64,11 @@
 }
 
 .mb-3 {
-    font-size: 40px;
+    font-size: 6vh;
     font-weight: bold;
     color: #525252;
     text-align: left;
-    margin-bottom: 20px;
+    margin-bottom: 4vh;
 }
 
 .form-label-2 {
@@ -81,7 +81,7 @@
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
     margin-top: 0.2rem;
     margin-bottom: 1rem;
-    padding: 5px;
+    padding: 1vh;
 }
 
 .lobby-button {
@@ -115,10 +115,10 @@
 }
 
 .mb-2 {
-    font-size: 30px;
+    font-size: 4vh;
     color: #525252;
     text-align: left;
-    margin-bottom: 20px;
+    margin-bottom: 4vh;
 }
 
 

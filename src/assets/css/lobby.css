@@ -17,7 +17,7 @@
 }
 
 .lobby-code {
-    font-size: 36px;
+    font-size: 6vh;
     color:#525252;
     font-weight: bold;
 }
@@ -71,7 +71,12 @@
     top: 20%; 
     left: 0%; 
     transform: translateY(-50%);
-    font-size: 18px; 
+    font-size: 3vh; 
     color: #525252;
-    font-weight: bold;
+}
+
+.members-list{
+    list-style:disc;
+    position: fixed;
+    width: 10vw;
 }

@@ -1,22 +1,29 @@
 import { Link, useLoaderData, useLocation } from "react-router-dom";
 import Image from "react-bootstrap/Image";
 import Button from "react-bootstrap/Button";
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 import "../assets/css/lobby.css";
 
 
 export default function LobbyPage() {
     const location = useLocation();
     const passedState = location.state;
+	const listRef = useRef(null);
 	// const joinedMembersArray = ['Member 1', 'Member 2', 'Member 3']; 
 
 	const [joinedMembersArray, setJoinedMembersArray] = useState(['Member 1', 'Member 2', 'Member 3']); // Initialize with existing members
 
     const handleAddMember = () => {
         const newMember = `New Member ${joinedMembersArray.length + 1}`;
-        setJoinedMembersArray([...joinedMembersArray, newMember]);
+        setJoinedMembersArray(prevMembers => [...prevMembers, newMember]);
+
+        // Scroll to the bottom after adding a member
+        if (listRef.current) {
+            listRef.current.scrollTop = listRef.current.scrollHeight;
+        }
     };
 
+	
     console.log(passedState)
 
     return <>
@@ -25,13 +32,11 @@ export default function LobbyPage() {
 			<div className="lobby-code">
 				lobby page for {passedState.code}
 				<div className="joined-members-section">
-                    <ul>
+                    <ul className="members-list">
                         {joinedMembersArray.map((member, index) => (
                             <li key={index}>{member}</li>
                         ))}
                     </ul>
-					<button onClick={handleAddMember}>Add Member</button>
-
                 </div>
 			</div>
 			<Link to="/">home</Link>
