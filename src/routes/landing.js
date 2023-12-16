@@ -68,62 +68,62 @@ export default function LoginPage() {
 
 	};
 
-	onAuthStateChanged(anon, (firebaseUser) => {
-		if (firebaseUser) {
-			// User is signed in, see docs for a list of available properties
-			// https://firebase.google.com/docs/reference/js/auth.user
-			console.log(firebaseUser.uid);
-			// ...
-		} else {
-			console.log("See you next time!");
-			setUser(null)
-		}
-	});
+	useEffect(() => {
 
+		onAuthStateChanged(anon, (firebaseUser) => {
+			if (firebaseUser) {
+				// User is signed in, see docs for a list of available properties
+				// https://firebase.google.com/docs/reference/js/auth.user
+				setUser(firebaseUser)
+				console.log(firebaseUser.uid);
+				// ...
+			} else {
+				console.log("See you next time!");
+				setUser(null)
+			}
+		});
+	}, [])
+		
 	return <>
 		<div className="landingBody">
-		<div style={{ position: "fixed", right: 0, top: 0, height: "100vh", width: "37vw", zIndex: '1' }}>
+		<div className="ab1">
 			{user && <Button onClick={signOut}> sign out</Button>}
-			<Card border="dark" style={{ backdropFilter: 'blur(10px)', backgroundColor: '#FFFFFF95', margin: '0', padding: '20px', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)', height: "100vh" }}>
-				<Card.Body style={{ padding: '50px' }}>
+			<Card className="card" border="dark" >
+				<Card.Body className="card-body">
 					<Card.Title className="mb-3">What's the <span className="orangeText">Motive</span>?</Card.Title>
 					<Card.Subtitle className="mb-2 mt-2">Create a Group</Card.Subtitle>
 					<Card.Text>Help decide the best location for everyone.</Card.Text>
 					<Form onSubmit={handleFormSubmit}>
-						<Form.Group className="mb-3" controlId="formGuestName">
-							<FormLabel style={{ display: 'block', marginBottom: '0.2rem' }}><small>Your Name</small></FormLabel>
+						<Form.Group  controlId="formGuestName">
+							<FormLabel className="form-label"><small>Your Name</small></FormLabel>
 							<Form.Control
+								className="form-control"
 								type="text"
 								placeholder=""
-								style={{ width: '97.5%', marginTop: "0.2rem", marginBottom: "0.2rem" }}
 								defaultValue={""} // had to do these last two properties 
 								ref={guestNameRef} // bc removing onChange makes the input read-only
 							// this gets around that somehow lol
 							/>
-							<div className="d-grid gap-2">
+							<div>
 								{!isCreate &&
-									<Form.Group className="mb-3" controlId="formLobbyCode">
-										<FormLabel style={{ display: 'block', marginBottom: '0.1rem' }}>
+									<Form.Group controlId="formLobbyCode">
+										<FormLabel className="form-label-2" >
 											<small>Group code</small>
 										</FormLabel>
 										<Form.Control
+											className="form-control"
 											type="text"
 											placeholder=""
-											style={{ width: '97.5%', marginTop: "0.2rem", marginBottom: "0.2rem" }}
 											defaultValue={""}
 											ref={codeRef}
 										/>
 									</Form.Group>}
-								<Button variant="light"
+								<Button 
+									variant="light"
 									type="submit"
-									style={{
-										width: '100%',
-										marginTop: "0.2rem",
-										marginBottom: "0.2rem",
-										boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.3)'
-									}}
+									className="lobby-button"
 								>
-									{isCreate === true ? "Create Lobby" : "Join Lobby"}
+									{isCreate ? "Create Lobby" : "Join Lobby"}
 								</Button>
 							</div>
 						</Form.Group>
@@ -139,7 +139,7 @@ export default function LoginPage() {
 							}}
 							className="link-button"
 							onClick={() => setIsCreate(!isCreate)}>
-							{isCreate === true ? "Join a group" : "Create a group"}
+							{isCreate ? "Join a group" : "Create a group"}
 						</Button>
 					</div>
 				</Card.Body>

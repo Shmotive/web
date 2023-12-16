@@ -1,5 +1,8 @@
 import { Link, useLoaderData, useLocation } from "react-router-dom"
+import Image from "react-bootstrap/Image";
+import Button from "react-bootstrap/Button"
 import "../assets/css/lobby.css";
+ 
 
 export default function LobbyPage() {
     const location = useLocation();
@@ -8,10 +11,18 @@ export default function LobbyPage() {
     console.log(passedState)
 
     return <>
-    <div>
-        lobby page for {passedState.code}
-    </div>
+    <div className="container">
+        <Image className="logo" src={require("../assets/shrug-smiley.jpg")} />
+        <div className="lobby-code">
+            lobby page for {passedState.code}
+        </div>
     <Link to="/">home</Link>
+        
+            <Button className="ready-button" variant="secondary" size="lg"> waiting for host... </Button>
+    </div>
+        <div className="lobby">
+            lobby page for {passedState.guestName}
+        </div>
     </>
 }
 

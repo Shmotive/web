@@ -6,25 +6,79 @@
     background-position: 25% 50%;
 }
 
+.ab1 {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    width: 37vw;
+    z-index: 1;
+}
+
+.card {
+    backdrop-filter: blur(10px);
+    background-color: #FFFFFF95;
+    margin: 0;
+    padding: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    height: 100vh;
+}
+
+.card-body {
+    padding: 50px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.2rem;
+}
+
 .link-button:hover {
     color: red;
     cursor: pointer;
 }
 
 .mb-3 {
-    font-size: 48px;
+    font-size: 40px;
     font-weight: bold;
     color: #525252;
     text-align: left;
     margin-bottom: 20px;
 }
 
+.form-label-2 {
+    display: block;
+    margin-bottom: 0.1rem;
+}
+
+.form-control, .lobby-button {
+    width: 100%;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+    padding: 5px;
+}
+
+.lobby-button {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+    border: none;
+    border-radius: 3px;
+    background-color: #F46F60;
+    color: white;
+}
+
+.lobby-button:hover {
+    cursor: pointer;
+}
+
 .mb-2 {
-    font-size: 36px;
+    font-size: 30px;
     color: #525252;
     text-align: left;
     margin-bottom: 20px;
 }
+
+
 
 .orangeText {
     color: #F46F60;
