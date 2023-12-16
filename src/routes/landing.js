@@ -128,15 +128,11 @@ export default function LoginPage() {
 							</div>
 						</Form.Group>
 					</Form>
-					<small style={{ display: "block", textAlign: "center", marginTop: "0.3rem", marginBottom: "0.3rem" }}> or </small>
-					<div style={{ textAlign: "center" }}>
-						<Button variant="link" size="sm"
-							style={{
-								backgroundColor: 'transparent',
-								borderColor: 'transparent',
-								textDecoration: 'none',
-								boxShadow: 'none'
-							}}
+					<small className="small" > or </small>
+					<div className="link-button-container">
+						<Button 
+							variant="link" 
+							size="sm"
 							className="link-button"
 							onClick={() => setIsCreate(!isCreate)}>
 							{isCreate ? "Join a group" : "Create a group"}

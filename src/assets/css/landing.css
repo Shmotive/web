@@ -71,6 +71,24 @@
     cursor: pointer;
 }
 
+.small {
+    display: block;
+    text-align: center;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+}
+
+.link-button-container {
+    text-align: center;
+}
+
+.link-button {
+    background-color: transparent;
+    border-color: transparent;
+    text-decoration: none;
+    box-shadow: none;
+}
+
 .mb-2 {
     font-size: 30px;
     color: #525252;
