@@ -1,5 +1,5 @@
 import { Outlet } from "react-router"
-import "./landing.css";
+import "../assets/css/landing.css";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate, useLoaderData } from "react-router-dom";
 import Card from 'react-bootstrap/Card';
@@ -81,6 +81,7 @@ export default function LoginPage() {
 	});
 
 	return <>
+		<div className="landingBody">
 		<div style={{ position: "fixed", right: 0, top: 0, height: "100vh", width: "37vw", zIndex: '1' }}>
 			{user && <Button onClick={signOut}> sign out</Button>}
 			<Card border="dark" style={{ backdropFilter: 'blur(10px)', backgroundColor: '#FFFFFF95', margin: '0', padding: '20px', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)', height: "100vh" }}>
@@ -144,7 +145,7 @@ export default function LoginPage() {
 				</Card.Body>
 			</Card>
 		</div>
-
+		</div>
 	</>
 }
 

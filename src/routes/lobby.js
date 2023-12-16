@@ -1,5 +1,5 @@
 import { Link, useLoaderData, useLocation } from "react-router-dom"
-
+import "../assets/css/lobby.css";
 
 export default function LobbyPage() {
     const location = useLocation();
