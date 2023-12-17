@@ -1,29 +1,57 @@
+
 .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     height: 100vh;
-    width: 100%;
+    width: 100vw;
+    justify-content: space-between;
+    display: flex;
+    flex-direction: row;
+}
+
+.col-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    flex: 1;
 }
 
 .logo {
-    position: absolute;
-    top: 0;
-    left: 0;
     margin-top: 2.5vh;
-    margin-left: 2.5vh;
-    height: 5vh;
-    width: 5vw;
+    margin-left: 2.5vw;
+    flex-basis: 20%;
+    
 }
 
+.joined-members-container {
+    flex-basis: auto;
+}
+
+.members{
+    width: 10vw;
+}
+
+.col-middle {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    flex: 1;
+}
+
+.flex-1{
+    flex: 1;
+}
 .lobby-code {
     font-size: 6vh;
     color:#525252;
     font-weight: bold;
+    flex: 1;
+}
+
+.button-container {
+    flex: 1;
 }
 
 .ready-button {
-    position: absolute;
     bottom: 0;
     margin-bottom: 10%;
     background-color: #FFFFFF;
@@ -66,17 +94,10 @@
     opacity: 1;
 }
 
-.joined-members-section {
-    position: absolute;
-    top: 20%; 
-    left: 0%; 
-    transform: translateY(-50%);
-    font-size: 3vh; 
-    color: #525252;
-}
-
-.members-list{
-    list-style:disc;
-    position: fixed;
-    width: 10vw;
+.col-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
 }
