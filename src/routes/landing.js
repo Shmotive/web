@@ -87,10 +87,7 @@ export default function LoginPage() {
 		
 		<div className="landingBody">
 		<div className="card-container">
-			<div className = "left-col-container">
-				<div><Image className="landing-logo" src={require("../assets/shrug-smiley.jpg")} /></div>
-				<div/>
-			</div>
+			<div className = "left-col-container"><Image className="landing-logo" src={require("../assets/shrug-smiley.jpg")} /></div>
 			<div/>
 			<Card className="card" border="dark" >
 				<Card.Body className="card-body">
