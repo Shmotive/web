@@ -24,7 +24,9 @@ export default function LobbyPage() {
     return <>
             <div className="container">
                 <div className="col-left">
-                    <Image className="logo" src={require("../assets/shrug-smiley.jpg")} />
+                    <div className="logo">
+                    <Image src={require("../assets/shrug-smiley.jpg")} />
+                    </div>
                     <div className="joined-members-container">
                             {joinedMembersArray.map((member, index) => (
                                 <UserSlot key={index} name={member} /> 
