@@ -7,17 +7,126 @@ import Button from 'react-bootstrap/Button';
 import { deleteUser, getAuth, onAuthStateChanged, signInAnonymously } from "@firebase/auth";
 import auth from "../firebase-config"
 import { FormLabel, Image } from "react-bootstrap";
+import { useMutation, gql, useQuery } from '@apollo/client';
 
-export default function LoginPage() {
+export default function LandingPage() {
 	const navigate = useNavigate();
 	const anon = getAuth();
-	const guestNameRef = useRef();
+	const guestNameRef = useRef('');
 	const codeRef = useRef('');
 	const [isCreate, setIsCreate] = useState(true);
 	const [user, setUser] = useState(anon.currentUser);
 
+	// gql parses the template strings into valid operations
+
+	const CREATE_USER = gql` 
+		mutation CreateUser(
+			$uuid: String!,
+			$username: String!
+		) {
+			createUser(uuid: $uuid, username: $username) {
+				uuid
+				username
+				created_at
+			}
+		}
+	`;
+
+	const CREATE_LOBBY_GET_CODE = gql`
+		mutation CreateLobbyAndGetCode(
+			$uuid: String!
+		) {
+			createLobbyAndGetCode(uuid: $uuid) {
+				code	
+			}
+		}
+	`;
+
+	const JOIN_LOBBY = gql`
+		mutation JoinLobby(
+			$uuid: String!,
+			$code: String!
+		) {
+			joinLobby(uuid: $uuid, code: $code) {
+				code	
+			}
+		}
+	`;
+	
+	// when createUser resolves the promise, it returns the reactive variables
+	// in the destructured array
+	const navigateToLobby = () => {
+		const code = codeRef.current.value || 'ABCD'; // createLobbyData ? createLobbyData.lobby.code : joinLobbyData.lobby.code;
+		const name = guestNameRef.current.value;
+		navigate('/lobby/' + code, { state: { name, code } });
+	};
+
+// 	const [joinLobby, { data: joinLobbyData,
+// 					loading: joinLobbyLoading,
+// 					error: joinLobbyError,
+// 					reset: joinLobbyReset
+// 					}
+// 			] = useMutation(JOIN_LOBBY, {
+// 					variables: {
+// 						uuid: user ? user.uid : '',
+// 						code: codeRef.current.value
+// 					},
+// 					onError: (error) => { 
+// 						console.error(error);
+// 						deleteUser(user)
+// 						.then(() => {
+// 							console.log('error creating lobby')
+// 						})
+// 						.catch(err => console.log(err))
+// 						joinLobbyReset(); // 
+// 					},
+// 					onCompleted: navigateToLobby
+// 	});
+
+// 	const [createLobbyAndGetCode, { data: createLobbyData,
+// 		 							loading: createLobbyLoading,
+// 									error: createLobbyError,
+// 									reset: createLobbyReset
+// 									}
+// 					] = useMutation(CREATE_LOBBY_GET_CODE, { 
+// 					variables: {uuid: user ? user.uid : ''},
+// 	   				onError: (error) => { 
+// 		   				console.error(error);
+// 		   				deleteUser(user)
+// 		   				.then(() => {
+// 			   				console.log('error creating lobby')
+// 		   				})
+// 		   				.catch(err => console.log(err))
+// 		   				createLobbyReset();  
+// 					},
+// 	   				onCompleted: navigateToLobby
+//    });
+
+	const [createUser, { data: data1,
+		 				loading: loading1,
+						error: createUserError,
+						reset: createUserReset
+						}
+					] = useMutation(CREATE_USER, {
+		 					variables: {
+								uuid: user ? user.uid : '' ,
+								username: guestNameRef.current.value
+							},
+							onError: (error) => { // error callback for createUser -- deletes firebase user 
+								console.error(error);
+								deleteUser(user)
+								.then(() => {
+									console.log('error creating user')
+								})
+								.catch(err => console.log(err))
+								createUserReset(); // Reset the mutation's reactive variables to their initial state
+		  					},
+							onCompleted:  navigateToLobby// isCreate ? createLobbyAndGetCode : joinLobby
+	})
+
 	useEffect(() => {
-		console.log('user: ', user);
+		console.log(user)
+		// if (user) createUser();
 	}, [user])
 
 	function signOut() {
@@ -37,34 +146,26 @@ export default function LoginPage() {
 		}
 	}
 
-	const handleFormSubmit = async (e) => {
+	const handleFormSubmit = async(e) => {
 
-		const guestName = guestNameRef.current.value;
-		const code = codeRef.current.value || "ABCD";
-		// we can use useRef in order to send the form's (guestname) value
-		// this means we don't need to track the changes of the input using
-		// state, so the component doesn't needlessly rerender
-
-		if (!user) {
-			signInAnonymously(anon)
-				.then(() => {
-					// Signed in..
-					// step1: generate the lobby code: setCode(generateLobbyCode());
-					console.log('code generated')
-	
-					// step2: route to /lobby/:code in one of several ways:
-	
-					// using redirect, usenavigate, or usehistory -- all from reactrouter
-				})
-				.catch((error) => {
-					const errorCode = error.code;
-					const errorMessage = error.message;
-					console.log(errorCode, errorMessage)
-					return
-				});
-		} 
-		navigate('/lobby/' + code, { state: { guestName, code } })
-
+		// if (!user) {
+		// 	signInAnonymously(anon)
+		// 		.then(() => {
+		// 			// Signed in..
+		// 			console.log('code generated')
+										
+		// 			// createUser()
+		// 			// 	.catch(error => console.log(error));
+					
+		// 		})
+		// 		.catch((error) => {
+		// 			const errorCode = error.code;
+		// 			const errorMessage = error.message;
+		// 			console.log(errorCode, errorMessage)
+		// 			return
+		// 		});
+		// }
+		createUser();
 	};
 
 	useEffect(() => {

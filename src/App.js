@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import Root , {loader as rootLoader} from './routes/landing';
-import LoginPage, {loader as loginLoader} from './routes/login';
+import LandingPage, {loader as landingLoader} from './routes/landing';
 import LobbyPage, {loader as lobbyLoader} from './routes/lobby';
 
 const routes = [
@@ -12,9 +12,9 @@ const routes = [
     loader: rootLoader,
   },
   {
-    path: "/login",
-    element: <LoginPage />,
-    loader: loginLoader,
+    path: "/landing",
+    element: <LandingPage />,
+    loader: landingLoader,
   },
   {
     path: "/lobby/:id",
