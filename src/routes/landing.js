@@ -7,65 +7,22 @@ import Button from 'react-bootstrap/Button';
 import { deleteUser, getAuth, onAuthStateChanged, signInAnonymously } from "@firebase/auth";
 import auth from "../firebase-config"
 import { FormLabel, Image } from "react-bootstrap";
-import { useMutation, gql, useQuery } from '@apollo/client';
-import { CREATE_USER } from "../mutations";
+import { useMutation, gql, useLazyQuery } from '@apollo/client';
+import { CREATE_USER, CREATE_LOBBY, JOIN_LOBBY } from "../mutations";
+import { DEBUG_GET_USER } from "../queries";
 
 export default function LandingPage() {
 	const navigate = useNavigate();
 	const firebaseAuth = getAuth();
-	const guestNameRef = useRef('');
-	const codeRef = useRef('');
+	const [userName, setuserName] = useState('');
+	const [lobbyCode, setlobbyCode] = useState('');
 	const [isCreate, setIsCreate] = useState(true);
 	const [user, setUser] = useState(firebaseAuth.currentUser);
 
-	// when createUser resolves the promise, it returns the reactive variables
-	// in the destructured array
-	function navigateToLobby() {
-		const code = codeRef.current.value; // createLobbyData ? createLobbyData.lobby.code : joinLobbyData.lobby.code;
-		const name = guestNameRef.current.value;
+	function navigateToLobby(code) {
+		const name = userName
 		navigate('/lobby/' + code, { state: { name, code } });
 	};
-
-	// 	const [joinLobby, { data: joinLobbyData,
-	// 					loading: joinLobbyLoading,
-	// 					error: joinLobbyError,
-	// 					reset: joinLobbyReset
-	// 					}
-	// 			] = useMutation(JOIN_LOBBY, {
-	// 					variables: {
-	// 						uuid: user ? user.uid : '',
-	// 						code: codeRef.current.value
-	// 					},
-	// 					onError: (error) => { 
-	// 						console.error(error);
-	// 						deleteUser(user)
-	// 						.then(() => {
-	// 							console.log('error creating lobby')
-	// 						})
-	// 						.catch(err => console.log(err))
-	// 						joinLobbyReset(); // 
-	// 					},
-	// 					onCompleted: navigateToLobby
-	// 	});
-
-	// 	const [createLobbyAndGetCode, { data: createLobbyData,
-	// 		 							loading: createLobbyLoading,
-	// 									error: createLobbyError,
-	// 									reset: createLobbyReset
-	// 									}
-	// 					] = useMutation(CREATE_LOBBY_GET_CODE, { 
-	// 					variables: {uuid: user ? user.uid : ''},
-	// 	   				onError: (error) => { 
-	// 		   				console.error(error);
-	// 		   				deleteUser(user)
-	// 		   				.then(() => {
-	// 			   				console.log('error creating lobby')
-	// 		   				})
-	// 		   				.catch(err => console.log(err))
-	// 		   				createLobbyReset();  
-	// 					},
-	// 	   				onCompleted: navigateToLobby
-	//    });
 
 	function signOut() {
 		if (user.isAnonymous) {
@@ -84,20 +41,68 @@ export default function LandingPage() {
 			});
 		}
 	}
+	const [getUserQuery, { client }] = useLazyQuery(DEBUG_GET_USER);
 
 	const [createUser, { reset: createUserReset }] = useMutation(CREATE_USER);
+	const [createLobby, { reset: createLobbyReset }] = useMutation(CREATE_LOBBY);
+	const [joinLobby, { reset: joinLobbyReset }] = useMutation(JOIN_LOBBY);
 
 	async function handleFormSubmit(e) {
 		e.preventDefault()
 		if (!user) {
 			signInAnonymously(firebaseAuth).then((userCredential) => {
-				console.log(userCredential)
 				createUser({
 					variables: {
 						uuid: userCredential.user.uid,
-						username: guestNameRef.current.value
+						username: userName 
 					}
-				});
+				}).then(createUserResponse => {
+					console.log('createuserresponse:', createUserResponse)
+					const { data: createUserData, error: createUserError } = createUserResponse;
+					const uuid = createUserData.createUser.uuid;
+
+					if (createUserError) console.log('createusererror:', createUserError.message, createUserError.code)
+
+					if (createUserData) {
+						console.log(isCreate)
+						if (isCreate) {
+							 createLobby({
+								variables: {
+									uuid: uuid
+								}
+							}).then((createLobbyResponse) => {
+								console.log(createLobbyResponse);
+								const { data: createLobbyData, error: createLobbyError } = createLobbyResponse;
+								const code = createLobbyData.createLobby.lobby_code;
+
+								if (createLobbyError) console.log('createlobbyerror: ',createLobbyError.code, createLobbyError.message);
+
+								if (createLobbyData) {
+									navigateToLobby(code);
+								}
+							}).catch(err => console.log('createlobbyerror', err.code, err.message))
+						} else {
+							joinLobby({
+								variables: {
+								uuid: uuid,
+								lobby_code: lobbyCode 
+								}
+							}).then(joinLobbyResponse => {
+								const {data: joinLobbyData, error: joinLobbyError} = joinLobbyResponse;
+								const code = joinLobbyData.joinLobby.lobby_code;
+								
+								if (joinLobbyError) console.log(joinLobbyError);
+
+								if (joinLobbyData) {
+									navigateToLobby(code);
+								}
+							}).catch(err => console.log(err));
+						}
+						
+					}
+
+
+				}).catch(error => console.log("createusererror:", error));
 			})
 				.catch((error) => {
 					const errorCode = error.code;
@@ -113,20 +118,32 @@ export default function LandingPage() {
 		onAuthStateChanged(firebaseAuth, (firebaseUser) => {
 			setUser(firebaseUser)
 			if (firebaseUser) {
-				guestNameRef.current.value = `${firebaseUser.uid}'s username please replace this cristian`
-				console.log(`user ${firebaseUser.uid} signed in`);
-				// ...
+				console.log(firebaseUser.uid);
+				getUserQuery({
+					variables: {
+						uuid: firebaseUser.uid
+					}
+				}).then(userQueryResponse => {
+					console.log(userQueryResponse);
+					const { data: userQueryData, error: userQueryerror } = userQueryResponse;
+					
+					if (userQueryerror) console.log(userQueryerror.message, userQueryerror.code)
+					if (userQueryData) setuserName(`${userQueryData.DEBUG_getUser.username}`);
+					console.log(`i just set the username to ${userQueryData.DEBUG_getUser.username} `);
+				}).catch(err => console.log('userQueryError', err.code, err.message));
 			} else {
-				guestNameRef.current.value = ''
+				setuserName('')
 				console.log("user signed out");
 			}
 		});
 	}, [])
+	
 
 	return <>
 
 		<div className="landingBody">
 			<div className="card-container">
+
 				<div className="left-col-container"><Image className="landing-logo" src={require("../assets/shrug-smiley.jpg")} /></div>
 				<div />
 				<Card className="card" border="dark" >
@@ -137,17 +154,21 @@ export default function LandingPage() {
 						<Card.Title className="whats-the-text">What's the <span className="orangeText">Motive</span>?</Card.Title>
 						<Card.Subtitle className="create-group-text">Create a Group</Card.Subtitle>
 						<Card.Text className="help">Help decide the best location for everyone.</Card.Text>
-						<Form onSubmit={handleFormSubmit}>
+						<Form onSubmit={(e) => {
+							handleFormSubmit(e);
+						}}>
 							<Form.Group controlId="formGuestName">
 								<FormLabel className="form-label"><small>Your Name</small></FormLabel>
 								<Form.Control
 									className="form-control"
-									disabled={user} // this field is disabled when a user is already signed in
+									 disabled={user} // this field is disabled when a user is already signed in
 									type="text"
 									placeholder=""
-									defaultValue="" // had to do these last two properties 
-									ref={guestNameRef} // bc removing onChange makes the input read-only
-								// this gets around that somehow lol
+									value={userName}
+									onChange={(e) => {
+										setuserName(e.target.value);
+									}}
+
 								/>
 								<div>
 									{!isCreate &&
@@ -159,12 +180,15 @@ export default function LandingPage() {
 												className="form-control"
 												type="text"
 												placeholder=""
-												defaultValue={""}
-												ref={codeRef}
+												value={lobbyCode}
+												onChange={(e) => {
+													setlobbyCode(e.target.value);
+												}}
+												
 											/>
 										</Form.Group>}
 									<Button
-										// disabled={guestNameRef.current.value.length === 0 || (!isCreate && codeRef.current.value.length === 0)} TODO fix disabled button logic
+										disabled={userName.length === 0 || (!isCreate && lobbyCode.length === 0)}
 										variant="light"
 										type="submit"
 										className="lobby-button"

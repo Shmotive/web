@@ -14,12 +14,12 @@ mutation CreateUser(
 }
 `;
 
-export const CREATE_LOBBY_GET_CODE = gql`
-mutation CreateLobbyAndGetCode(
+export const CREATE_LOBBY = gql`
+mutation CreateLobby(
     $uuid: String!
 ) {
-    createLobbyAndGetCode(uuid: $uuid) {
-        code	
+    createLobby(uuid: $uuid) {
+        lobby_code	
     }
 }
 `;
@@ -27,10 +27,10 @@ mutation CreateLobbyAndGetCode(
 export const JOIN_LOBBY = gql`
 mutation JoinLobby(
     $uuid: String!,
-    $code: String!
+    $lobby_code: String!
 ) {
-    joinLobby(uuid: $uuid, code: $code) {
-        code	
+    joinLobby(uuid: $uuid, lobby_code: $lobby_code) {
+        lobby_code	
     }
 }
 `;
