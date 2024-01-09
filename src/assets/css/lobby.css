@@ -94,6 +94,13 @@
     opacity: 1;
 }
 
+.lobby-button:disabled {
+    border-color: #DDDDDD;
+    color: #DDDDDD;
+    cursor: not-allowed;
+    opacity: 1;
+}
+
 .col-right {
     display: flex;
     flex-direction: column;
