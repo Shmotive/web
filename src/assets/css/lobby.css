@@ -1,110 +1,117 @@
-
 .container {
-    height: 100vh;
-    width: 100vw;
-    justify-content: space-between;
-    display: flex;
-    flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: row;
 }
 
 .col-left {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  flex: 1;
 }
 
 .logo {
-    margin-top: 2.5vh;
-    margin-left: 2.5vw;
-    flex-basis: 2%;
-    
+  margin-top: 2.5vh;
+  margin-left: 2.5vw;
+  flex-basis: 2%;
+  width: 2.5vh;
+  height: 2.5vh;
 }
 
 .joined-members-container {
-    flex-basis: auto;
+  flex-basis: auto;
 }
 
-.members{
-    width: 10vw;
+.members {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 1px solid black;
+  max-width: 20vw;
+  justify-content: space-evenly;
 }
 
 .col-middle {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-    flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  flex: 1;
 }
 
-.flex-1{
-    flex: 1;
+.flex-1 {
+  flex: 1;
 }
 .lobby-code {
-    font-size: 6vh;
-    color:#525252;
-    font-weight: bold;
-    flex: 1;
+  font-size: 6vh;
+  color: #525252;
+  font-weight: bold;
+  flex: 1;
 }
 
 .button-container {
-    flex: 1;
+  flex: 1;
 }
 
 .ready-button {
-    bottom: 0;
-    margin-bottom: 10%;
-    background-color: #FFFFFF;
-    border: 1px solid #222222;
-    border-radius: 8px;
-    box-sizing: border-box;
-    color: #222222;
-    cursor: pointer;
-    display: inline-block;
-    font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 20px;
-    outline: none;
-    padding: 13px 23px;
-    text-align: center;
-    text-decoration: none;
-    touch-action: manipulation;
-    transition: box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s;
-    user-select: none;
-    -webkit-user-select: none;
-    width: auto;
+  bottom: 0;
+  margin-bottom: 10%;
+  background-color: #ffffff;
+  border: 1px solid #222222;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #222222;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto,
+    "Helvetica Neue", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  outline: none;
+  padding: 13px 23px;
+  text-align: center;
+  text-decoration: none;
+  touch-action: manipulation;
+  transition: box-shadow 0.2s, -ms-transform 0.1s, -webkit-transform 0.1s,
+    transform 0.1s;
+  user-select: none;
+  -webkit-user-select: none;
+  width: auto;
 }
 
 .ready-button:hover {
-    box-shadow: #222222 0 0 0 1px, rgba(255, 255, 255, 0.8) 0 0 0 3px;
-    transition: box-shadow .2s;
+  box-shadow: #222222 0 0 0 1px, rgba(255, 255, 255, 0.8) 0 0 0 3px;
+  transition: box-shadow 0.2s;
 }
 
 .ready-button:active {
-    background-color: #F7F7F7;
-    border-color: #000000;
-    transform: scale(.96);
+  background-color: #f7f7f7;
+  border-color: #000000;
+  transform: scale(0.96);
 }
 
 .ready-button:disabled {
-    border-color: #DDDDDD;
-    color: #DDDDDD;
-    cursor: not-allowed;
-    opacity: 1;
+  border-color: #dddddd;
+  color: #dddddd;
+  cursor: not-allowed;
+  opacity: 1;
 }
 
 .lobby-button:disabled {
-    border-color: #DDDDDD;
-    color: #DDDDDD;
-    cursor: not-allowed;
-    opacity: 1;
+  border-color: #dddddd;
+  color: #dddddd;
+  cursor: not-allowed;
+  opacity: 1;
 }
 
 .col-right {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
 }
