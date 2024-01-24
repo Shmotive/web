@@ -6,9 +6,10 @@ import {
 } from "react-router-dom";
 import Image from "react-bootstrap/Image";
 import Button from "react-bootstrap/Button";
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "../assets/css/lobby.css";
 import UserSlot from "../components/lobby/UserSlot";
+import Logo from "../assets/logo.svg";
 
 export default function LobbyPage() {
   const location = useLocation();
@@ -21,14 +22,21 @@ export default function LobbyPage() {
   const [joinedMembersArray, setJoinedMembersArray] = useState([
     "Member",
     "Benito",
-    "Charles",
-    "Doofus",
     "Evan",
     "Ze",
     "Adolf",
-    "Stalin",
+    "Joseph",
   ]); // Initialize with existing members
 
+  useEffect(() => {
+    setJoinedMembersArray((prev) => {
+      const newArray = [...prev];
+      while (newArray.length < 8) {
+        newArray.push("");
+      }
+      return newArray;
+    });
+  });
   // const buttonOnClick = () => {
   //     navigate('/recommendations/' + passedState.code)
   // };
@@ -39,7 +47,7 @@ export default function LobbyPage() {
       <div className="container">
         <div className="col-left">
           <div className="logo">
-            <Image src={require("../assets/shrug-smiley.jpg")} width={100} />
+            <Image src={Logo} style={{ width: "100%", height: "100%" }} />
           </div>
           <div className="joined-members-container">
             {joinedMembersArray.map((member, index) => (
@@ -48,26 +56,34 @@ export default function LobbyPage() {
           </div>
         </div>
         <div className="col-middle">
-          <div className="flex-1"></div>
-          <div>Your group code is:</div>
-          <div className="lobby-code">{passedState.code}</div>
+          {/* <div className="flex-1"></div> */}
+          <div className="join-info">
+            Join on any device at{" "}
+            <a className="link" href="#">
+              whatsthemotive.app
+            </a>
+          </div>
+          <div className="room-info">
+            Your group code is:
+            <div className="lobby-code">{passedState.code}</div>
+          </div>
           <div className="button-container">
             <Button
-              disabled={true}
+              disabled={false}
               className="ready-button user-view"
               variant="secondary"
               size="lg"
             >
-              {false ? "start" : "waiting for host..."}
+              {false ? "START" : "Waiting for host to start..."}
             </Button>
             {/* above, the check for whether the user viewing is host
                         is done by comparing the current user id to that of the host
                         on the DB i.e. (user.id === host.id) ? 'start' : 'waiting for host...')  */}
           </div>
         </div>
-        <div className="col-right">
+        {/* <div className="col-right">
           <Link to="/">home</Link>
-        </div>
+        </div> */}
       </div>
     </>
   );

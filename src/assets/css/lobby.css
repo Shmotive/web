@@ -7,38 +7,44 @@
 }
 
 .col-left {
+  position: absolute;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  flex: 1;
+  gap: 5vh;
+  /* border: 1px solid #f56e60; */
 }
 
 .logo {
   margin-top: 2.5vh;
   margin-left: 2.5vw;
   flex-basis: 2%;
-  width: 2.5vh;
-  height: 2.5vh;
+  width: 8vh;
+  height: 8vh;
+  justify-content: center;
+  align-items: center;
 }
 
 .joined-members-container {
   flex-basis: auto;
+  padding-left: 2vw;
 }
 
 .members {
   display: flex;
   flex-direction: row;
   align-items: center;
-  /* border: 1px solid black; */
   max-width: 10vw;
   justify-content: flex-start;
   gap: 8px;
+  margin-bottom: 1vh;
+  color: #f56e60;
+  font-weight: 600;
 }
 
 .col-middle {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-evenly;
   align-items: center;
   flex: 1;
 }
@@ -46,25 +52,37 @@
 .flex-1 {
   flex: 1;
 }
+.join-info {
+  margin-top: -10vh;
+}
+
+.link {
+  text-decoration: none;
+  color: #f56e60;
+}
+.room-info {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
 .lobby-code {
-  font-size: 6vh;
+  font-size: 10vh;
   color: #525252;
   font-weight: bold;
-  flex: 1;
 }
 
 .button-container {
-  flex: 1;
 }
 
 .ready-button {
   bottom: 0;
   margin-bottom: 10%;
-  background-color: #ffffff;
-  border: 1px solid #222222;
+  background-color: #f56e60;
+  border: none;
   border-radius: 8px;
   box-sizing: border-box;
-  color: #222222;
+  color: #ffffff;
   cursor: pointer;
   display: inline-block;
   font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto,
@@ -90,14 +108,16 @@
 }
 
 .ready-button:active {
-  background-color: #f7f7f7;
+  background-color: #f58174;
   border-color: #000000;
   transform: scale(0.96);
 }
 
 .ready-button:disabled {
-  border-color: #dddddd;
-  color: #dddddd;
+  background: #828383;
+  border-color: #828383;
+  color: #ffffff;
+  font-weight: 500;
   cursor: not-allowed;
   opacity: 1;
 }
@@ -105,6 +125,7 @@
 .lobby-button:disabled {
   border-color: #dddddd;
   color: #dddddd;
+  background-color: #828383;
   cursor: not-allowed;
   opacity: 1;
 }
@@ -112,7 +133,7 @@
 .col-right {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   flex: 1;
 }
