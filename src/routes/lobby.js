@@ -19,9 +19,14 @@ export default function LobbyPage() {
   // const joinedMembersArray = ['Member 1', 'Member 2', 'Member 3'];
 
   const [joinedMembersArray, setJoinedMembersArray] = useState([
-    "Member 1",
-    "Member 2",
-    "Member 3",
+    "Member",
+    "Benito",
+    "Charles",
+    "Doofus",
+    "Evan",
+    "Ze",
+    "Adolf",
+    "Stalin",
   ]); // Initialize with existing members
 
   // const buttonOnClick = () => {

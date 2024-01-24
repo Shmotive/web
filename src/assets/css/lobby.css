@@ -29,9 +29,10 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  border: 1px solid black;
-  max-width: 20vw;
-  justify-content: space-evenly;
+  /* border: 1px solid black; */
+  max-width: 10vw;
+  justify-content: flex-start;
+  gap: 8px;
 }
 
 .col-middle {
