@@ -17,10 +17,7 @@ export default function LobbyPage() {
   const { name, code } = passedState;
   const listRef = useRef(null);
   const navigate = useNavigate();
-  // const joinedMembersArray = ['Member 1', 'Member 2', 'Member 3'];
-
   const [joinedMembersArray, setJoinedMembersArray] = useState([
-    "Member",
     "Benito",
     "Evan",
     "Ze",
@@ -47,7 +44,9 @@ export default function LobbyPage() {
       <div className="container">
         <div className="col-left">
           <div className="logo">
-            <Image src={Logo} style={{ width: "100%", height: "100%" }} />
+            <Link to={"/"}>
+              <Image src={Logo} style={{ width: "100%", height: "100%" }} />
+            </Link>
           </div>
           <div className="joined-members-container">
             {joinedMembersArray.map((member, index) => (
@@ -69,7 +68,7 @@ export default function LobbyPage() {
           </div>
           <div className="button-container">
             <Button
-              disabled={false}
+              disabled={true}
               className="ready-button user-view"
               variant="secondary"
               size="lg"
