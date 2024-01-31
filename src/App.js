@@ -1,14 +1,14 @@
-import React from 'react';
-import './App.css';
-import { createMemoryRouter, RouterProvider } from 'react-router-dom';
-import Root , {loader as rootLoader} from './routes/landing';
-import LandingPage, {loader as landingLoader} from './routes/landing';
-import LobbyPage, {loader as lobbyLoader} from './routes/lobby';
+import React, { useEffect } from "react";
+import "./App.css";
+import { createMemoryRouter, RouterProvider } from "react-router-dom";
+import Root, { loader as rootLoader } from "./routes/landing";
+import LandingPage, { loader as landingLoader } from "./routes/landing";
+import LobbyPage, { loader as lobbyLoader } from "./routes/lobby";
 
 const routes = [
   {
     path: "/",
-    element: <Root/>,
+    element: <Root />,
     loader: rootLoader,
   },
   {
@@ -24,13 +24,11 @@ const routes = [
 ];
 
 const router = createMemoryRouter(routes, {
-  initialEntries: ["/"]
+  initialEntries: ["/"],
 });
 
 function App() {
-  return (
-    <RouterProvider router={router} />
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

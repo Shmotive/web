@@ -11,34 +11,67 @@ import "../assets/css/lobby.css";
 import UserSlot from "../components/lobby/UserSlot";
 import Logo from "../assets/logo.svg";
 
+import { useSubscription, useQuery } from "@apollo/client";
+import { LOBBY_PAGE_SUBSCRIPTION } from "../subscriptions";
+import { GET_LOBBY_USERS } from "../queries";
+
 export default function LobbyPage() {
   const location = useLocation();
   const passedState = location.state;
-  const { name, code } = passedState;
+  const { name, code, uuid } = passedState;
+  const { data: lobby_users, error: lobby_users_error } = useQuery(
+    GET_LOBBY_USERS,
+    {
+      variables: { lobby_code: code },
+    }
+  );
+  const {
+    data: lobby_users_subscription,
+    error: lobby_users_error_subscription,
+  } = useSubscription(LOBBY_PAGE_SUBSCRIPTION, {
+    variables: { lobby_code: code, uuid: uuid },
+  });
+  const [users, setUsers] = useState([]);
+
   const listRef = useRef(null);
   const navigate = useNavigate();
-  const [joinedMembersArray, setJoinedMembersArray] = useState([
-    "Benito",
-    "Evan",
-    "Ze",
-    "Adolf",
-    "Joseph",
-  ]); // Initialize with existing members
 
   useEffect(() => {
-    setJoinedMembersArray((prev) => {
-      const newArray = [...prev];
-      while (newArray.length < 8) {
-        newArray.push("");
-      }
-      return newArray;
-    });
-  });
+    // query
+    if (lobby_users_subscription) {
+      setUsers((prev) => {
+        const arr = [...lobby_users_subscription.subscribeToLobby.participants];
+        while (arr.length < 8) {
+          arr.push("");
+        }
+        return arr;
+      });
+      return;
+    }
+    if (lobby_users)
+      setUsers((prev) => {
+        const arr = [...lobby_users.getLiveLobby.participants];
+        while (arr.length < 8) {
+          arr.push("");
+        }
+        return arr;
+      });
+  }, [lobby_users_subscription, lobby_users]);
+
+  // useEffect(() => {
+  //   setJoinedMembersArray((prev) => {
+  //     const newArray = [...prev];
+  //     while (newArray.length < 8) {
+  //       newArray.push("");
+  //     }
+  //     return newArray;
+  //   });
+  // }, []);
+
   // const buttonOnClick = () => {
   //     navigate('/recommendations/' + passedState.code)
   // };
 
-  console.log("PASSED STATE", passedState);
   return (
     <>
       <div className="container">
@@ -49,7 +82,7 @@ export default function LobbyPage() {
             </Link>
           </div>
           <div className="joined-members-container">
-            {joinedMembersArray.map((member, index) => (
+            {users.map((member, index) => (
               <UserSlot key={index} index={index} name={member} />
             ))}
           </div>
@@ -79,6 +112,7 @@ export default function LobbyPage() {
                         is done by comparing the current user id to that of the host
                         on the DB i.e. (user.id === host.id) ? 'start' : 'waiting for host...')  */}
           </div>
+          <div>LOBBY_USERS: {JSON.stringify(lobby_users)}</div>
         </div>
         {/* <div className="col-right">
           <Link to="/">home</Link>
