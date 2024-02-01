@@ -22,7 +22,8 @@ const httpLink = new HttpLink({
 const wsLink = new GraphQLWsLink(
   createClient({
     //GQL subscription setup
-    url: "ws://localhost:4000/subscriptions",
+    // url: "ws://localhost:4000/subscriptions", This gives me Error 400.
+    url: "ws://localhost:4000/graphql",
     connectionParams: {
       authToken: "user.uuid", // this auth token will just be the user's firebase id maybe?
     }, // subscriptions using ws only happen past the landing page,
