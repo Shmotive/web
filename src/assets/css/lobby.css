@@ -78,7 +78,7 @@
 .ready-button {
   bottom: 0;
   margin-bottom: 10%;
-  background-color: #f56e60;
+  background-color: #7ed7c1;
   border: none;
   border-radius: 8px;
   box-sizing: border-box;
@@ -108,7 +108,7 @@
 }
 
 .ready-button:active {
-  background-color: #f58174;
+  background-color: #dcffb7;
   border-color: #000000;
   transform: scale(0.96);
 }
@@ -136,4 +136,38 @@
   justify-content: flex-start;
   align-items: center;
   flex: 1;
+}
+
+.input-field-container {
+  align-items: center;
+  display: flex;
+  justify-content: space-evenly;
+  width: 50vw;
+}
+
+.suggestion-input {
+  border: 1px solid #828383;
+  border-radius: 8px;
+  font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto,
+    "Helvetica Neue", sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 32px;
+  padding: 12px 12px;
+  text-align: center;
+  width: 50%;
+}
+
+.suggestion-button {
+  background-color: #525252;
+  border: none;
+  box-sizing: border-box;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 16px;
+  outline: none;
+  text-decoration: none;
+  touch-action: manipulation;
+  width: 25%;
 }

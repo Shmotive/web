@@ -14,6 +14,7 @@ import Logo from "../assets/logo.svg";
 import { useSubscription, useQuery } from "@apollo/client";
 import { LOBBY_PAGE_SUBSCRIPTION } from "../subscriptions";
 import { GET_LOBBY_USERS } from "../queries";
+import InputField from "../components/lobby/InputField";
 
 export default function LobbyPage() {
   const location = useLocation();
@@ -37,8 +38,9 @@ export default function LobbyPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // query
+    // Subscription
     if (lobby_users_subscription) {
+      console.log("LOBBY_USERS_SUBSCRIPTION", lobby_users_subscription);
       setUsers((prev) => {
         const arr = [...lobby_users_subscription.subscribeToLobby.participants];
         while (arr.length < 8) {
@@ -48,7 +50,9 @@ export default function LobbyPage() {
       });
       return;
     }
-    if (lobby_users)
+
+    // query
+    if (lobby_users) {
       setUsers((prev) => {
         const arr = [...lobby_users.getLiveLobby.participants];
         while (arr.length < 8) {
@@ -56,17 +60,8 @@ export default function LobbyPage() {
         }
         return arr;
       });
+    }
   }, [lobby_users_subscription, lobby_users]);
-
-  // useEffect(() => {
-  //   setJoinedMembersArray((prev) => {
-  //     const newArray = [...prev];
-  //     while (newArray.length < 8) {
-  //       newArray.push("");
-  //     }
-  //     return newArray;
-  //   });
-  // }, []);
 
   // const buttonOnClick = () => {
   //     navigate('/recommendations/' + passedState.code)
@@ -99,6 +94,12 @@ export default function LobbyPage() {
             Your group code is:
             <div className="lobby-code">{passedState.code}</div>
           </div>
+          <InputField
+            buttonLabel="CLICK ME"
+            onClick={() => {
+              console.log("clicked button!");
+            }}
+          />
           <div className="button-container">
             <Button
               disabled={true}
@@ -106,13 +107,21 @@ export default function LobbyPage() {
               variant="secondary"
               size="lg"
             >
-              {false ? "START" : "Waiting for host to start..."}
+              {false ? "START" : "Waiting for host to start voting phase..."}
             </Button>
             {/* above, the check for whether the user viewing is host
                         is done by comparing the current user id to that of the host
                         on the DB i.e. (user.id === host.id) ? 'start' : 'waiting for host...')  */}
           </div>
-          <div>LOBBY_USERS: {JSON.stringify(lobby_users)}</div>
+          {/* <div>LOBBY_USERS: {JSON.stringify(lobby_users)}</div> */}
+          {/* <div>LOBBY_USERS_ERROR: {JSON.stringify(lobby_users_error)}</div>
+          <div>
+            LOBBY_PAGE_SUBSCRIPTION: {JSON.stringify(lobby_users_subscription)}
+          </div>
+          <div>
+            lobby_users_error_subscription:{" "}
+            {JSON.stringify(lobby_users_error_subscription)}
+          </div> */}
         </div>
         {/* <div className="col-right">
           <Link to="/">home</Link>

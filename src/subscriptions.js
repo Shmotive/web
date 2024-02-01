@@ -11,7 +11,10 @@ export const NEW_MESSAGE_SUBSCRIPTION = gql`
 export const LOBBY_PAGE_SUBSCRIPTION = gql`
   subscription subscribeToLobby($lobby_code: String!, $uuid: String!) {
     subscribeToLobby(lobby_code: $lobby_code, uuid: $uuid) {
-      lobby_code
+      owner {
+        uuid
+        username
+      }
       state
       participants {
         uuid
