@@ -14,10 +14,10 @@ const httpLink = new HttpLink({
 });
 
 const wsLink = new GraphQLWsLink(createClient({ //GQL subscription setup
-  url: 'ws://localhost:4000/subscriptions',
-  connectionParams: {
-    authToken: 'user.uuid' // this auth token will just be the user's firebase id maybe?
-  }                        // subscriptions using ws only happen past the landing page,
+  url: 'ws://localhost:4000/graphql' ,
+  options: {
+    reconnect: true,
+  }                       // subscriptions using ws only happen past the landing page,
 }));                       // where there's already initialized users with ids
 
 // The split function takes three parameters:

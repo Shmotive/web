@@ -10,3 +10,17 @@ query DEBUG_getUser(
     }
 } 
 `;
+
+export const GET_LOBBY = gql`
+query getLiveLobby(
+    $lobby_code: String!
+) {
+    getLiveLobby(lobby_code: $lobby_code) {
+        recommendations {
+            name
+            category
+            id
+        }
+    }
+}
+`;

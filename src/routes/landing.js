@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import { deleteUser, getAuth, onAuthStateChanged, signInAnonymously } from "@firebase/auth";
 import auth from "../firebase-config"
 import { FormLabel, Image } from "react-bootstrap";
-import { useMutation, gql, useLazyQuery } from '@apollo/client';
+import { useMutation, useLazyQuery } from '@apollo/client';
 import { CREATE_USER, CREATE_LOBBY, JOIN_LOBBY } from "../mutations";
 import { DEBUG_GET_USER } from "../queries";
 
@@ -21,7 +21,7 @@ export default function LandingPage() {
 
 	function navigateToLobby(code) {
 		const name = userName
-		navigate('/lobby/' + code, { state: { name, code } });
+		navigate('/lobby/' + code, { state: { name, code, uuid: firebaseAuth.currentUser.uid } });
 	};
 
 	function signOut() {

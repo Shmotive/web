@@ -4,6 +4,7 @@ import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import Root , {loader as rootLoader} from './routes/landing';
 import LandingPage, {loader as landingLoader} from './routes/landing';
 import LobbyPage, {loader as lobbyLoader} from './routes/lobby';
+import VotingPage, {loader as votingLoader} from './routes/voting';
 
 const routes = [
   {
@@ -20,6 +21,11 @@ const routes = [
     path: "/lobby/:id",
     element: <LobbyPage />,
     loader: lobbyLoader,
+  },
+  {
+    path: "/voting/:id",
+    element: <VotingPage />,
+    loader: votingLoader,
   },
 ];
 

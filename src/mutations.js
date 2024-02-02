@@ -34,3 +34,45 @@ mutation JoinLobby(
     }
 }
 `;
+
+export const ADD_SUGGESTION = gql`
+mutation addSuggestion(
+    $uuid: String!,
+    $lobbyCode: String!,
+    $name: String!
+) {
+    addSuggestion(uuid: $uuid, lobby_code: $lobbyCode, name: $name) {
+      suggested_by {
+        username
+      }
+      name
+    }
+  }
+`;
+
+export const START_LOBBY = gql`
+mutation startLobby(
+    $lobby_code: String!
+) {
+    startLobby(lobby_code: $lobby_code) {
+        lobby_code
+        state
+    }
+}
+`;
+
+export const SUBMIT_VOTE = gql`
+mutation submitVote(
+    $uuid: String!,
+    $lobby_code: String!,
+    $recommendation_id: String!,
+    $vote: Boolean!
+) {
+    submitVote(uuid: $uuid, lobby_code: $lobby_code, recommendation_id: $recommendation_id, vote: $vote) {
+        yes_vote
+        recommendation {
+            name
+        }
+    }
+}
+`;

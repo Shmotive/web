@@ -2,6 +2,8 @@ import { Link, useLoaderData, useLocation, useNavigate } from "react-router-dom"
 import Image from "react-bootstrap/Image";
 import Button from "react-bootstrap/Button";
 import React, {useState, useRef} from "react";
+import { useMutation } from "@apollo/client";
+import { START_LOBBY } from "../mutations";
 import "../assets/css/lobby.css";
 
 
@@ -10,14 +12,34 @@ export default function LobbyPage() {
     const passedState = location.state;
 	const listRef = useRef(null);
     const navigate = useNavigate();
+    const [name, setName] = useState(passedState.name)
+    const [code, setCode] = useState(passedState.code)
+    const [uuid, setUuid] = useState(passedState.uuid)
+    // to send some state variables to voting page just in case
+    // navigate('/voting/' + code, {state: { name, code }} )
+
 	// const joinedMembersArray = ['Member 1', 'Member 2', 'Member 3']; 
 
 	const [joinedMembersArray, setJoinedMembersArray] = useState(['Member 1', 'Member 2', 'Member 3']); // Initialize with existing members
 
+    const [startLobby, { reset: startLobbyReset }] = useMutation(START_LOBBY);
 
-    // const buttonOnClick = () => {
-    //     navigate('/recommendations/' + passedState.code)
-    // };
+    async function buttonOnClick() {
+        startLobby({
+            variables: {
+                lobby_code: code
+            }
+        }).then((startLobbyResponse) => {
+            console.log(startLobbyResponse)
+            const { data: startLobbyData, error: startLobbyError } = startLobbyResponse;
+
+            if (startLobbyError) console.log(startLobbyError)
+            
+            if (startLobbyData) {
+                navigate('/voting/' + passedState.code, { state: {name, code, uuid}})
+            }
+        }).catch(err => console.log(err))
+    };
 	
     console.log(passedState)
 
@@ -48,6 +70,13 @@ export default function LobbyPage() {
                         {/* above, the check for whether the user viewing is host
                         is done by comparing the current user id to that of the host
                         on the DB i.e. (user.id === host.id) ? 'start' : 'waiting for host...')  */}
+                    <Button
+                        className="ready-button user-view" 
+                        variant="secondary"
+                        size="lg" 
+                        onClick={buttonOnClick}
+                        >{"voting test"}  {/* button for testing purposes*/}
+                    </Button>
                     </div>
                 </div>
                 <div className="col-right">

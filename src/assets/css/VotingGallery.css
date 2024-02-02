@@ -1,0 +1,38 @@
+.swiper {
+    width: 100%;
+    height: 100%;
+  }
+  
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: gray;
+
+  /* Center slide text vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+  
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.voting-finished-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7); /* Adjust color and opacity for blur effect */
+  display: flex;
+  justify-content: center;
+  align-items:flex-start;
+  font-size: 24px; /* Adjust as needed */
+  z-index: 1100; /* Above the buttons */
+  backdrop-filter: blur(5px); /* This will give the blur effect */
+}
+  
