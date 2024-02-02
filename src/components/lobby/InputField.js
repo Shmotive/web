@@ -2,6 +2,8 @@ import Button from "react-bootstrap/Button";
 export default function InputField({
   inputPlaceholder = "cafe, pizza, burgers...",
   buttonLabel = "Add Suggestion",
+  value,
+  setValue,
   onClick = () => {},
 }) {
   return (
@@ -10,6 +12,10 @@ export default function InputField({
         <input
           className="suggestion-input"
           placeholder={inputPlaceholder}
+          onChange={(e) => {
+            setValue(e.target.value);
+          }}
+          value={value}
         ></input>
         <Button
           className="suggestion-button suggestion-input"

@@ -1,36 +1,41 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
-
-export const CREATE_USER = gql` 
-mutation CreateUser(
-    $uuid: String!,
-    $username: String!
-) {
+export const CREATE_USER = gql`
+  mutation CreateUser($uuid: String!, $username: String!) {
     createUser(uuid: $uuid, username: $username) {
-        uuid
-        username
-        created_at
+      uuid
+      username
+      created_at
     }
-}
+  }
 `;
 
 export const CREATE_LOBBY = gql`
-mutation CreateLobby(
-    $uuid: String!
-) {
+  mutation CreateLobby($uuid: String!) {
     createLobby(uuid: $uuid) {
-        lobby_code	
+      lobby_code
     }
-}
+  }
 `;
 
 export const JOIN_LOBBY = gql`
-mutation JoinLobby(
-    $uuid: String!,
-    $lobby_code: String!
-) {
+  mutation JoinLobby($uuid: String!, $lobby_code: String!) {
     joinLobby(uuid: $uuid, lobby_code: $lobby_code) {
-        lobby_code	
+      lobby_code
     }
-}
+  }
+`;
+
+export const ADD_SUGGESTION = gql`
+  mutation AddSuggestion($uuid: String!, $lobby_code: String!, $name: String!) {
+    addSuggestion(uuid: $uuid, lobby_code: $lobby_code, name: $name) {
+      id
+      name
+      category
+      suggested_by {
+        username
+        uuid
+      }
+    }
+  }
 `;

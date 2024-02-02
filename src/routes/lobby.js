@@ -9,12 +9,13 @@ import Button from "react-bootstrap/Button";
 import React, { useEffect, useState, useRef } from "react";
 import "../assets/css/lobby.css";
 import UserSlot from "../components/lobby/UserSlot";
+import InputField from "../components/lobby/InputField";
 import Logo from "../assets/logo.svg";
 
-import { useSubscription, useQuery } from "@apollo/client";
+import { useSubscription, useQuery, useMutation } from "@apollo/client";
 import { LOBBY_PAGE_SUBSCRIPTION } from "../subscriptions";
+import { ADD_SUGGESTION } from "../mutations";
 import { GET_LOBBY_USERS } from "../queries";
-import InputField from "../components/lobby/InputField";
 
 export default function LobbyPage() {
   const location = useLocation();
@@ -26,6 +27,8 @@ export default function LobbyPage() {
       variables: { lobby_code: code },
     }
   );
+  const [addSuggestion, { reset: addSuggestionReset }] =
+    useMutation(ADD_SUGGESTION);
   const {
     data: lobby_users_subscription,
     error: lobby_users_error_subscription,
@@ -33,7 +36,8 @@ export default function LobbyPage() {
     variables: { lobby_code: code, uuid: uuid },
   });
   const [users, setUsers] = useState([]);
-
+  const [inputValue, setInputValue] = useState("");
+  const [submittedSuggestions, setSubmittedSuggestions] = useState([]);
   const listRef = useRef(null);
   const navigate = useNavigate();
 
@@ -42,7 +46,10 @@ export default function LobbyPage() {
     if (lobby_users_subscription) {
       console.log("LOBBY_USERS_SUBSCRIPTION", lobby_users_subscription);
       setUsers((prev) => {
-        const arr = [...lobby_users_subscription.subscribeToLobby.participants];
+        const arr = [
+          lobby_users_subscription.subscribeToLobby.owner,
+          ...lobby_users_subscription.subscribeToLobby.participants,
+        ];
         while (arr.length < 8) {
           arr.push("");
         }
@@ -54,7 +61,10 @@ export default function LobbyPage() {
     // query
     if (lobby_users) {
       setUsers((prev) => {
-        const arr = [...lobby_users.getLiveLobby.participants];
+        const arr = [
+          lobby_users.getLiveLobby.owner,
+          ...lobby_users.getLiveLobby.participants,
+        ];
         while (arr.length < 8) {
           arr.push("");
         }
@@ -63,6 +73,24 @@ export default function LobbyPage() {
     }
   }, [lobby_users_subscription, lobby_users]);
 
+  function handleAddSuggestion() {
+    if (inputValue) {
+      addSuggestion({
+        variables: { uuid: uuid, lobby_code: code, name: inputValue },
+      })
+        .then((response) => {
+          console.log("ADD SUGGESTION RESPONSE:", response);
+          if (response?.errors) console.log(response.errors);
+          if (response?.data) {
+            setSubmittedSuggestions((prev) => {
+              return [...prev, response.data.addSuggestion];
+            });
+          }
+        })
+        .catch((err) => console.log(err));
+      setInputValue("");
+    }
+  }
   // const buttonOnClick = () => {
   //     navigate('/recommendations/' + passedState.code)
   // };
@@ -78,7 +106,11 @@ export default function LobbyPage() {
           </div>
           <div className="joined-members-container">
             {users.map((member, index) => (
-              <UserSlot key={index} index={index} name={member} />
+              <UserSlot
+                key={index}
+                index={index}
+                name={member?.username ? member.username : ""}
+              />
             ))}
           </div>
         </div>
@@ -95,10 +127,10 @@ export default function LobbyPage() {
             <div className="lobby-code">{passedState.code}</div>
           </div>
           <InputField
-            buttonLabel="CLICK ME"
-            onClick={() => {
-              console.log("clicked button!");
-            }}
+            buttonLabel="Add Suggestion"
+            value={inputValue}
+            setValue={setInputValue}
+            onClick={handleAddSuggestion}
           />
           <div className="button-container">
             <Button
@@ -113,8 +145,10 @@ export default function LobbyPage() {
                         is done by comparing the current user id to that of the host
                         on the DB i.e. (user.id === host.id) ? 'start' : 'waiting for host...')  */}
           </div>
-          {/* <div>LOBBY_USERS: {JSON.stringify(lobby_users)}</div> */}
-          {/* <div>LOBBY_USERS_ERROR: {JSON.stringify(lobby_users_error)}</div>
+
+          {/* <div>LOBBY_USERS: {JSON.stringify(lobby_users)}</div>
+          <div>SUGGESTIONS: {JSON.stringify(submittedSuggestions)}</div>
+          <div>LOBBY_USERS_ERROR: {JSON.stringify(lobby_users_error)}</div>
           <div>
             LOBBY_PAGE_SUBSCRIPTION: {JSON.stringify(lobby_users_subscription)}
           </div>
@@ -123,6 +157,14 @@ export default function LobbyPage() {
             {JSON.stringify(lobby_users_error_subscription)}
           </div> */}
         </div>
+        {submittedSuggestions.length > 0 && (
+          <div className="suggestions-container">
+            <div className="suggestions-header">You Suggested:</div>
+            {submittedSuggestions.map((item) => (
+              <div className="suggestion-item">{item?.name.toLowerCase()}</div>
+            ))}
+          </div>
+        )}
         {/* <div className="col-right">
           <Link to="/">home</Link>
         </div> */}
