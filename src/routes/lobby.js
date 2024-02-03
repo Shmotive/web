@@ -21,6 +21,11 @@ export default function LobbyPage() {
   const location = useLocation();
   const passedState = location.state;
   const { name, code, uuid } = passedState;
+  const [users, setUsers] = useState([]);
+  const [inputValue, setInputValue] = useState("");
+  const [submittedSuggestions, setSubmittedSuggestions] = useState([]);
+  const listRef = useRef(null);
+  const navigate = useNavigate();
   const { data: lobby_users, error: lobby_users_error } = useQuery(
     GET_LOBBY_USERS,
     {
@@ -35,11 +40,7 @@ export default function LobbyPage() {
   } = useSubscription(LOBBY_PAGE_SUBSCRIPTION, {
     variables: { lobby_code: code, uuid: uuid },
   });
-  const [users, setUsers] = useState([]);
-  const [inputValue, setInputValue] = useState("");
-  const [submittedSuggestions, setSubmittedSuggestions] = useState([]);
-  const listRef = useRef(null);
-  const navigate = useNavigate();
+  
 
   useEffect(() => {
     // Subscription
