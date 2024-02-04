@@ -15,8 +15,8 @@ export default function VotingGallery({ pool, uuid, code }) {
     const [submitVote, { reset: submitVoteReset }] = useMutation(SUBMIT_VOTE);
 
     console.log(pool.length, index)
-    console.log(typeof(code))
-    
+    console.log(typeof (code))
+
     function handleSubmit(recommendation, vote) {
         if (index === (pool.length - 1)) {
             setIsFinishedVoting(true)
@@ -38,20 +38,25 @@ export default function VotingGallery({ pool, uuid, code }) {
 
                 if (submitVoteData) {
                     setUserVoteResults([...userVoteResults,
-                         {
-                            vote: submitVoteData.submitVote.yes_vote,
-                            name: submitVoteData.submitVote.recommendation.name
-                        }
+                    {
+                        vote: submitVoteData.submitVote.yes_vote,
+                        name: submitVoteData.submitVote.recommendation.name
+                    }
                     ])
                 }
             }).catch(err => console.log(err))
         }
     };
-    
+
     console.log(userVoteResults)
 
-    return <div 
-                style={{backgroundColor: 'red', height: '100vh', width: '100vw'}}>
+    return <div className="full-container">
+        <div className="left-container"></div>
+        <div className="middle-container">
+            <div className="middle-container-1"></div>
+            <div
+                style={{width: '20vw', height: '50vh'}}
+                className="middle-container-2">
                 <Swiper
                     noSwiping={true}
                     className="swiper-no-swiping"
@@ -61,52 +66,59 @@ export default function VotingGallery({ pool, uuid, code }) {
                     onSwiper={(swiper) => setSwiper(swiper)}
                 >
                     {pool.map(recommendation => {
-                        return <SwiperSlide 
-                                key={recommendation.id}>
-                                        <div className="swiper-no-swiping">{recommendation.name}</div>
-                                </SwiperSlide>
-                    })}  
+                        return <SwiperSlide
+                            key={recommendation.id}>
+                            <div className="swiper-no-swiping">{recommendation.name}</div>
+                        </SwiperSlide>
+                    })}
                 </Swiper>
                 {isFinishedVoting && (
-                <div className="voting-finished-overlay">
-                    <span>Wait for other users to finish voting...</span>
-                    {userVoteResults.map((result) => {
-                        return <p style={{display: 'block'}}>You voted {result.vote ? "Yes" : "No"} for {result.name}</p>
+                    <div className="voting-finished-overlay">
+                        <span>Wait for other users to finish voting...</span>
+                        {userVoteResults.map((result) => {
+                            return <p style={{ display: 'block' }}>You voted {result.vote ? "Yes" : "No"} for {result.name}</p>
 
-                    })}
-                </div>
+                        })}
+                    </div>
                 )}
-                <Button
-                    className="ready-button user-view" 
-                    variant="secondary"
-                    size="lg"
-                    style={{
-                        position: 'absolute',
-                        top: '50%',
-                        right: '20px',
-                        transform: 'translateY(-50%)',
-                        zIndex: 1000, // High z-index to ensure it's on top
-                        height: '10%'
-                    }} 
-                    onClick={() => {
-                        handleSubmit(pool[index], true)
-                    }}
-                    >{"Yes Vote"}  {/* button for testing purposes*/}
-                </Button>
-                <Button
-                    className="ready-button user-view" 
-                    variant="secondary"
-                    size="lg" 
-                    style={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '20px',
-                        transform: 'translateY(-50%)',
-                        zIndex: 1000, // Same high z-index for this button
-                        height: "10%"
-                    }}
-                    onClick={() => {handleSubmit(pool[index], false)}}
-                    >{"No Vote"}  {/* button for testing purposes*/}
-                </Button>  
-        </div> 
+            </div>
+            <div className="middle-container-3"></div>
+        </div>
+
+        <div className="right-container"></div>
+        <Button
+            className="ready-button user-view"
+            variant="secondary"
+            size="lg"
+            style={{
+                position: 'absolute',
+                flex: 0,
+                top: '50%',
+                right: '20px',
+                transform: 'translateY(-50%)',
+                zIndex: 1000, // High z-index to ensure it's on top
+                height: '10%'
+            }}
+            onClick={() => {
+                handleSubmit(pool[index], true)
+            }}
+        >{"Yes Vote"}  {/* button for testing purposes*/}
+        </Button>
+        <Button
+            className="ready-button user-view"
+            variant="secondary"
+            size="lg"
+            style={{
+                position: 'absolute',
+                top: '50%',
+                left: '20px',
+                flex: 0,
+                transform: 'translateY(-50%)',
+                zIndex: 1000, // Same high z-index for this button
+                height: "10%"
+            }}
+            onClick={() => { handleSubmit(pool[index], false) }}
+        >{"No Vote"}  {/* button for testing purposes*/}
+        </Button>
+    </div>
 };

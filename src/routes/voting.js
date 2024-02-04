@@ -1,4 +1,4 @@
-import { Link, useLoaderData, useLocation, useNavigate } from "react-router-dom";
+import { Link, json, useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useSubscription, useQuery } from "@apollo/client";
 import { VOTING_PAGE_SUBSCRIPTION } from "../subscriptions";
@@ -30,11 +30,28 @@ export default function VotingPage() {
         navigate('/results/' + code,)
     }
 
+    // FISHER-YATES SORTING ALGORITHM: PSEUDO-RANDOMLY SHUFFLES ELEMENTS IN AN ARRAY
+
+    function shuffleArray(arr) {
+        var i = arr.length, j, temp;
+        while(--i > 0){
+          j = Math.floor(Math.random()*(i+1));
+          temp = arr[j];
+          arr[j] = arr[i];
+          arr[i] = temp;
+        }
+      }
+
     useEffect(() => {
         if (lobbyQueryData) {
-            setRecommendationsArray(lobbyQueryData.getLiveLobby.recommendations.map((recommendation) => {
-                return recommendation
-            }))
+            // Combine custom and generated recommendation arrays iCAtbaLMEcGfD6NOmU75GvGse5a22nto one array when the component loads 
+            console.log(lobbyQueryData.getLiveLobby.custom_recommendations, lobbyQueryData.getLiveLobby.generated_recommendations)
+            let combinedArray = lobbyQueryData.getLiveLobby.custom_recommendations.concat(lobbyQueryData.getLiveLobby.generated_recommendations);
+            console.log(combinedArray)
+            // let shuffled = JSON.parse(JSON.stringify(combinedArray))
+            // shuffleArray(shuffled)
+            console.log(combinedArray)
+            setRecommendationsArray(combinedArray)
         }
         if (lobbySubscriptionData) {
             setSubscriptionData(lobbySubscriptionData)

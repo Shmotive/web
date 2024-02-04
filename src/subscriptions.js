@@ -31,10 +31,15 @@ subscription subscribeToLobby(
 ) {
     subscribeToLobby(lobby_code: $lobbyCode, uuid: $uuid) {
         state
-        recommendations {
-            category
-            id
-            name
+        custom_recommendations {
+          name
+          category
+          id
+        }
+        generated_recommendations {
+          name
+          category
+          id
         }
         lobby_code
         id

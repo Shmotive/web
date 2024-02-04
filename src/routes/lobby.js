@@ -181,7 +181,7 @@ export default function LobbyPage() {
           <div className="suggestions-container">
             <div className="suggestions-header">You Suggested:</div>
             {submittedSuggestions.map((item) => (
-              <div className="suggestion-item">{item?.name.toLowerCase()}</div>
+              <div key={item.id} className="suggestion-item">{item?.name.toLowerCase()}</div>
             ))}
           </div>
         )}

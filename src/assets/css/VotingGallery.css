@@ -30,9 +30,53 @@
   background-color: rgba(255, 255, 255, 0.7); /* Adjust color and opacity for blur effect */
   display: flex;
   justify-content: center;
-  align-items:flex-start;
+  align-items:center;
   font-size: 24px; /* Adjust as needed */
   z-index: 1100; /* Above the buttons */
   backdrop-filter: blur(5px); /* This will give the blur effect */
 }
-  
+ 
+
+/* Container flex styling */
+
+.full-container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.left-container {
+  flex: 1;
+}
+
+.middle-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+  border: black;
+  border-radius: 2px;
+  align-items: center;
+}
+
+.middle-container-1 {
+  display: flex;
+  flex: 1
+}
+
+.middle-container-2 {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+}
+
+.middle-container-3 {
+  display: flex;
+  flex: 1;
+}
+
+.right-container {
+  flex: 1;
+}

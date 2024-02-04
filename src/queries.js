@@ -14,11 +14,16 @@ query getLiveLobby(
     $lobby_code: String!
 ) {
     getLiveLobby(lobby_code: $lobby_code) {
-        recommendations {
-            name
-            category
-            id
-        }
+      custom_recommendations {
+        name
+        category
+        id
+      }
+      generated_recommendations {
+        name
+        category
+        id
+      }
     }
 }
 `;
