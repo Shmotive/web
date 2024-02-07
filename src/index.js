@@ -9,7 +9,6 @@ import {
   ApolloProvider,
   split,
   HttpLink,
-  gql,
 } from "@apollo/client"; // GraphQL general setup
 import { getMainDefinition } from "@apollo/client/utilities";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions"; // subcription setup

@@ -1,28 +1,27 @@
 import "../assets/css/landing.css";
-import React, { useState, useRef, useEffect } from "react";
-import { useNavigate, useLoaderData } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import {
 	deleteUser,
-	getAuth,
 	onAuthStateChanged,
 	signInAnonymously,
 } from "@firebase/auth";
-import auth from "../firebase-config";
 import { FormLabel, Image } from "react-bootstrap";
 import { useMutation, useLazyQuery } from '@apollo/client';
 import { CREATE_USER, CREATE_LOBBY, JOIN_LOBBY } from "../mutations";
 import { DEBUG_GET_USER } from "../queries";
+import { auth as firebaseAuth } from "../firebase-config";
 
 export default function LandingPage() {
 	const navigate = useNavigate();
-	const firebaseAuth = getAuth();
-	const [userName, setuserName] = useState("");
+	const [userName, setUserName] = useState("");
 	const [lobbyCode, setlobbyCode] = useState("");
 	const [isCreate, setIsCreate] = useState(true);
-	const [user, setUser] = useState(firebaseAuth.currentUser);
+	const [isLoggedIn, setIsLoggedIn] = useState(!!firebaseAuth.currentUser);
+	const [isNavigating, setIsNavigating] = useState(false)
 
 	function navigateToLobby(code) {
 		const name = userName
@@ -30,15 +29,20 @@ export default function LandingPage() {
 	};
 
 	function signOut() {
+		setIsLoggedIn(false);
 		if (firebaseAuth.currentUser.isAnonymous) {
 			// delete and sign out
-			deleteUser(firebaseAuth.currentUser.isAnonymous)
-				.then(() => { console.log(`signed out and deleted anon user: ${firebaseAuth.currentUser}`); })
+			deleteUser(firebaseAuth.currentUser)
+				.then(() => {
+					console.log(`signed out and deleted anon user: ${firebaseAuth.currentUser}`);
+				})
 				.catch(console.error);
 		} else {
 			firebaseAuth
 				.signOut()
-				.then(() => { console.log(`Signed out user: ${firebaseAuth.currentUser}`); })
+				.then(() => {
+					console.log(`Signed out user: ${firebaseAuth.currentUser}`);
+				})
 				.catch(console.error);
 		}
 	}
@@ -48,18 +52,54 @@ export default function LandingPage() {
 	const [createLobby, { reset: createLobbyReset }] = useMutation(CREATE_LOBBY);
 	const [joinLobby, { reset: joinLobbyReset }] = useMutation(JOIN_LOBBY);
 
+	async function createOrJoinLobby() {
+		const uuid = firebaseAuth.currentUser.uid
+		if (isCreate) {
+			createLobby({
+				variables: { uuid: uuid },
+			}).then((createLobbyResponse) => {
+				const { data: createLobbyData, error: createLobbyError } = createLobbyResponse;
+				const code = createLobbyData.createLobby.lobby_code;
+
+				if (createLobbyError) {
+					console.error(createLobbyError)
+					return;
+				}
+				console.log(`Created lobby ${code}`)
+				navigateToLobby(code, uuid);
+			}).catch(console.error);
+		} else {
+			joinLobby({
+				variables: {
+					uuid: uuid,
+					lobby_code: lobbyCode,
+				},
+			}).then((joinLobbyResponse) => {
+				const { data: joinLobbyData, error: joinLobbyError } = joinLobbyResponse;
+				const code = joinLobbyData.joinLobby.lobby_code;
+
+				if (joinLobbyError) {
+					console.error(joinLobbyError)
+					return;
+				}
+
+				navigateToLobby(code, uuid);
+			}).catch(console.error);
+		}
+	}
+
 	async function handleFormSubmit(e) {
 		e.preventDefault();
+		setIsNavigating(true);
 		if (!firebaseAuth.currentUser) {
-			signInAnonymously(firebaseAuth)
-				.then((userCredential) => {
-					createUser({
+			await signInAnonymously(firebaseAuth)
+				.then(async (userCredential) => {
+					await createUser({
 						variables: {
 							uuid: userCredential.user.uid,
 							username: userName,
 						},
 					}).then((createUserResponse) => {
-						console.log(`createUserResponse: ${createUserResponse}`);
 						const { data: createUserData, error: createUserError } = createUserResponse;
 						const uuid = createUserData.createUser.uuid;
 
@@ -67,82 +107,64 @@ export default function LandingPage() {
 							console.error(createUserError);
 							return;
 						}
+						console.log(`Created user: ${createUserData.createUser.uuid}`);
 
-						if (isCreate) {
-							createLobby({
-								variables: { uuid: uuid },
-							}).then((createLobbyResponse) => {
-								console.log(createLobbyResponse);
-								const { data: createLobbyData, error: createLobbyError } = createLobbyResponse;
-								const code = createLobbyData.createLobby.lobby_code;
-
-								if (createLobbyError) {
-									console.error(createLobbyError)
-									return;
-								}
-
-								navigateToLobby(code, uuid);
-							}).catch(console.error);
-						} else {
-							joinLobby({
-								variables: {
-									uuid: uuid,
-									lobby_code: lobbyCode,
-								},
-							}).then((joinLobbyResponse) => {
-								const { data: joinLobbyData, error: joinLobbyError } = joinLobbyResponse;
-								const code = joinLobbyData.joinLobby.lobby_code;
-
-								if (joinLobbyError) {
-									console.error(joinLobbyError)
-									return;
-								}
-
-								navigateToLobby(code, uuid);
-							}).catch(console.error);
-						}
-					}).catch(console.error);
-				}).catch(console.error);
+					}).catch((err) => {
+						setIsNavigating(false);
+						console.error(err)
+					});
+				}).catch((err) => {
+					setIsNavigating(false);
+					console.error(err)
+					// TODO delete firebase user
+				});
 		}
+		createOrJoinLobby();
 	}
 
 	useEffect(() => {
-		onAuthStateChanged(firebaseAuth, (firebaseUser) => {
-			setUser(firebaseUser);
-			if (userName.length === 0) {
-				return;
-			} 
-			if (firebaseUser) {
-				console.log(`logged in as: ${firebaseUser.uid}`);
-				getUserQuery({ 
-					variables: { uuid: firebaseUser.uid },
-				}).then((userQueryResponse) => {
-						console.log(userQueryResponse);
+		const unsub = onAuthStateChanged(firebaseAuth, (firebaseUser) => {
+			if (!isNavigating) {
+				if (!firebaseUser) {
+					// signed out case
+					console.log("signed out case")
+					setIsLoggedIn(false)
+					setUserName("")
+					return;
+				} else {
+					// saved user case
+					console.log("saved user case")
+					setIsLoggedIn(true)
+					console.log(`Logged in with firebase uid: ${firebaseUser.uid}`);
+					getUserQuery({
+						variables: { uuid: firebaseUser.uid },
+					}).then((userQueryResponse) => {
 						const { data: userQueryData, error: userQueryError } = userQueryResponse;
-
 						if (userQueryError) {
 							console.error(userQueryError);
 							return; // returns undefined and resolves the .then() in the case that a user matching the input uuid was not found
 						}
-
-						setuserName(`${userQueryData.DEBUG_getUser.username}`);
+						setUserName(`${userQueryData.DEBUG_getUser.username}`);
 						console.log(
-							`i just set the username to ${userQueryData.DEBUG_getUser.username} `
+							`Logged in with motive username: ${userQueryData.DEBUG_getUser.username} `
 						);
 					}).catch(console.error);
+				}
 			}
 		});
-	}, []);
+
+		return () => {unsub()}
+	}, [isNavigating]);
 
 	return (
 		<>
 			<div className="landingBody">
 				<div className="card-container">
-					<Image className="landing-logo" src={require("../assets/shrug-smiley.jpg")}prefix=""/>
+					<Image className="landing-logo" src={require("../assets/shrug-smiley.jpg")} prefix="" />
 					<Card className="card" border="dark">
 						<Card.Body className="card-body">
 							<div className="button-wrapper">
-								{user && (
+								{isLoggedIn && (
 									<Button className="sign-out" onClick={signOut}>
 										Sign out
 									</Button>
@@ -152,7 +174,7 @@ export default function LandingPage() {
 								What's the <span className="orangeText">Motive</span>?
 							</Card.Title>
 							<Card.Subtitle className="create-group-text">
-								Create a Group
+								Create or join a lobby
 							</Card.Subtitle>
 							<Card.Text className="help">
 								Help decide the best location for everyone.
@@ -168,19 +190,19 @@ export default function LandingPage() {
 									</FormLabel>
 									<Form.Control
 										className="form-control"
-										disabled={user} // this field is disabled when a user is already signed in
+										disabled={isLoggedIn} // this field is disabled when a user is already signed in
 										type="text"
 										placeholder=""
 										value={userName}
 										onChange={(e) => {
-											setuserName(e.target.value);
+											setUserName(e.target.value);
 										}}
 									/>
 									<div>
 										{!isCreate && (
 											<Form.Group controlId="formLobbyCode">
 												<FormLabel className="form-label-2">
-													<small>Group code</small>
+													<small>Lobby code</small>
 												</FormLabel>
 												<Form.Control
 													className="form-control"
@@ -215,7 +237,7 @@ export default function LandingPage() {
 									className="link-button"
 									onClick={() => setIsCreate(!isCreate)}
 								>
-									{isCreate ? "Join a group" : "Create a group"}
+									{isCreate ? "Join a lobby" : "Create a lobby"}
 								</Button>
 							</div>
 						</Card.Body>

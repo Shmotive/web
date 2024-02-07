@@ -1,6 +1,5 @@
 import {
   Link,
-  useLoaderData,
   useLocation,
   useNavigate,
 } from "react-router-dom";
@@ -24,7 +23,6 @@ export default function LobbyPage() {
   const [users, setUsers] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [submittedSuggestions, setSubmittedSuggestions] = useState([]);
-  const listRef = useRef(null);
   const [ownerID, setOwnerID] = useState('')
   const [lobbyState, setLobbyState] = useState('')
   const navigate = useNavigate();
@@ -122,8 +120,6 @@ export default function LobbyPage() {
       }
     }).catch(console.error)
   };
-
-  console.log(lobbyState)
 
   return (
     <>
