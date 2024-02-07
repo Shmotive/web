@@ -26,35 +26,34 @@ export default function VotingPage() {
         }
     });
 
-    if (subscriptionData && subscriptionData.subscribeToLobby.state === 'RESULTS') {
-        navigate('/results/' + code,)
-    }
-
     // FISHER-YATES SORTING ALGORITHM: PSEUDO-RANDOMLY SHUFFLES ELEMENTS IN AN ARRAY
 
     function shuffleArray(arr) {
         var i = arr.length, j, temp;
         while(--i > 0){
           j = Math.floor(Math.random()*(i+1));
-          temp = arr[j];
-          arr[j] = arr[i];
-          arr[i] = temp;
+          temp = {...arr[j]};
+          arr[j] = {...arr[i]};
+          arr[i] = {...temp};
         }
       }
 
     useEffect(() => {
         if (lobbyQueryData) {
-            // Combine custom and generated recommendation arrays iCAtbaLMEcGfD6NOmU75GvGse5a22nto one array when the component loads 
+            // Combine custom and generated recommendation arrays into one array when the component loads 
             console.log(lobbyQueryData.getLiveLobby.custom_recommendations, lobbyQueryData.getLiveLobby.generated_recommendations)
             let combinedArray = lobbyQueryData.getLiveLobby.custom_recommendations.concat(lobbyQueryData.getLiveLobby.generated_recommendations);
-            console.log(combinedArray)
-            // let shuffled = JSON.parse(JSON.stringify(combinedArray))
-            // shuffleArray(shuffled)
-            console.log(combinedArray)
+            // console.log(combinedArray)
             setRecommendationsArray(combinedArray)
         }
         if (lobbySubscriptionData) {
             setSubscriptionData(lobbySubscriptionData)
+
+            // if subscription returns lobby state as results, this indicates that we should navigate to results page
+            if (lobbySubscriptionData.subscribeToLobby.state === 'RESULTS') {
+                console.log('a')
+                navigate('/results/' + code, { state: { code, uuid } })
+            }
         }
     }, [lobbyQueryData, lobbySubscriptionData])
 

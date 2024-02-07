@@ -43,3 +43,18 @@ export const GET_LOBBY_USERS = gql`
     }
   }
 `;
+
+export const GET_RESULTS = gql`
+query getResults(
+  $lobby_code: String!
+) {
+  getLiveLobby(lobby_code: $lobby_code) {
+    state
+    picks {
+      name
+      category
+      id
+    }
+  }
+}
+`

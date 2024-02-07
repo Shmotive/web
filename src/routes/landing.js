@@ -30,15 +30,15 @@ export default function LandingPage() {
 	};
 
 	function signOut() {
-		if (user.isAnonymous) {
+		if (firebaseAuth.currentUser.isAnonymous) {
 			// delete and sign out
-			deleteUser(user)
-				.then(() => { console.log(`signed out and deleted anon user: ${user}`); })
+			deleteUser(firebaseAuth.currentUser.isAnonymous)
+				.then(() => { console.log(`signed out and deleted anon user: ${firebaseAuth.currentUser}`); })
 				.catch(console.error);
 		} else {
 			firebaseAuth
 				.signOut()
-				.then(() => { console.log(`Signed out user: ${user}`); })
+				.then(() => { console.log(`Signed out user: ${firebaseAuth.currentUser}`); })
 				.catch(console.error);
 		}
 	}
@@ -50,7 +50,7 @@ export default function LandingPage() {
 
 	async function handleFormSubmit(e) {
 		e.preventDefault();
-		if (!user) {
+		if (!firebaseAuth.currentUser) {
 			signInAnonymously(firebaseAuth)
 				.then((userCredential) => {
 					createUser({
@@ -109,9 +109,12 @@ export default function LandingPage() {
 	useEffect(() => {
 		onAuthStateChanged(firebaseAuth, (firebaseUser) => {
 			setUser(firebaseUser);
+			if (userName.length === 0) {
+				return;
+			} 
 			if (firebaseUser) {
 				console.log(`logged in as: ${firebaseUser.uid}`);
-				getUserQuery({
+				getUserQuery({ 
 					variables: { uuid: firebaseUser.uid },
 				}).then((userQueryResponse) => {
 						console.log(userQueryResponse);
@@ -119,7 +122,7 @@ export default function LandingPage() {
 
 						if (userQueryError) {
 							console.error(userQueryError);
-							return;
+							return; // returns undefined and resolves the .then() in the case that a user matching the input uuid was not found
 						}
 
 						setuserName(`${userQueryData.DEBUG_getUser.username}`);
@@ -127,9 +130,6 @@ export default function LandingPage() {
 							`i just set the username to ${userQueryData.DEBUG_getUser.username} `
 						);
 					}).catch(console.error);
-			} else {
-				console.log(`user ${userName} signed out`);
-				setuserName("");
 			}
 		});
 	}, []);
