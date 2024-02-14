@@ -101,38 +101,41 @@ export default function VotingGallery({ pool, uuid, code, alerts, setAlerts }) {
 
         <div className="right-container"></div>
         <Button
-            className="ready-button user-view"
+            className="ready-button user-view yes-button"
             variant="secondary"
             size="lg"
             style={{
                 position: 'absolute',
                 flex: 0,
-                top: '75%',
+                top: '78%',
                 right: '53%',
                 transform: 'translateY(-50%)',
                 zIndex: 1000, // High z-index to ensure it's on top
-                height: '6%'
+                height: '5%',
+                width: '8%'
             }}
             onClick={() => {
                 handleSubmit(pool[index], true)
             }}
-        >{"Yes Vote"}  {/* button for testing purposes*/}
+        >{"Vote Yes"}  {/* button for testing purposes*/}
         </Button>
         <Button
-            className="ready-button user-view"
+            className="ready-button user-view vote-no-hover"
             variant="secondary"
             size="lg"
             style={{
                 position: 'absolute',
-                top: '75%',
+                top: '78%',
                 left: '53%',
                 flex: 0,
                 transform: 'translateY(-50%)',
                 zIndex: 1000, // Same high z-index for this button
-                height: "6%"
+                height: "5%",
+                width: '8%',
+                backgroundColor: '#F46F60'
             }}
             onClick={() => { handleSubmit(pool[index], false) }}
-        >{"No Vote"}  {/* button for testing purposes*/}
+        >{"Vote No"}  {/* button for testing purposes*/}
         </Button>
     </div>
 };
