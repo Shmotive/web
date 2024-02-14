@@ -28,3 +28,10 @@
     padding-left: 20%;
     padding-right: 20%;
 }
+
+.homebutton {
+    width: 10%;
+    position: absolute;
+    top: 1%;
+    right: 0.5%;
+}

@@ -4,6 +4,7 @@ import { Link, useLoaderData, useLocation, useNavigate } from "react-router-dom"
 import { useQuery } from "@apollo/client";
 import { GET_RESULTS } from "../queries";
 import Badge from "react-bootstrap/Badge"
+import Button from "react-bootstrap/Button"
 import ListGroup from "react-bootstrap/ListGroup";
 import Toasts from "../components/errors/Toasts";
 
@@ -11,8 +12,9 @@ export default function ResultsPage() {
     const location = useLocation();
     const passedState  = location.state;
     const { code, uuid } = passedState;
-    const [resultsArray, setResultsArray] = useState([])
-    const [alerts, setAlerts] = useState([])
+    const [resultsArray, setResultsArray] = useState([]);
+    const [alerts, setAlerts] = useState([]);
+    const navigate = useNavigate();
     
     const { data: resultsData, error: resultsError } = useQuery(GET_RESULTS, {
         variables: {
@@ -36,8 +38,17 @@ export default function ResultsPage() {
         }
     }, [resultsData, resultsError])
 
+    function handleOnClick() {
+        navigate('/landing', { state: { uuid } })
+    }
+
     return <>
-        <div className='main-container'> 
+        <div className='main-container'>
+            <Button className='homebutton' 
+                    variant='danger'
+                    onClick={handleOnClick}>
+                        Back to Homepage
+            </Button> 
             <Toasts alerts={alerts} />
             <div className='heading'>
                  Results for lobby {code}: 
