@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 import { SUBMIT_VOTE } from "../../mutations";
 import 'swiper/css';
 import '../../assets/css/VotingGallery.css'
+import placeholderImage from  '../../assets/placeholder.png'
 
 export default function VotingGallery({ pool, uuid, code, alerts, setAlerts }) {
     const [index, setIndex] = useState(0);
@@ -63,7 +64,7 @@ export default function VotingGallery({ pool, uuid, code, alerts, setAlerts }) {
         <div className="middle-container">
             <div className="middle-container-1"></div>
             <div
-                style={{width: '20vw', height: '50vh'}}
+                
                 className="middle-container-2">
                 <Swiper
                     noSwiping={true}
@@ -75,8 +76,13 @@ export default function VotingGallery({ pool, uuid, code, alerts, setAlerts }) {
                 >
                     {pool.map(recommendation => {
                         return <SwiperSlide
+                            style={{ backgroundImage: `url(${placeholderImage})`,
+                                     backgroundSize: 'cover',
+                                     backgroundPosition: 'center 90%',
+                                     backgroundRepeat: 'no-repeat',
+                                     borderRadius: '25px'}}
                             key={recommendation.id}>
-                            <div className="swiper-no-swiping">{recommendation.name}</div>
+                            <div className="swiper-no-swiping swiper-slide-title">{recommendation.name}</div>
                         </SwiperSlide>
                     })}
                 </Swiper>
@@ -101,11 +107,11 @@ export default function VotingGallery({ pool, uuid, code, alerts, setAlerts }) {
             style={{
                 position: 'absolute',
                 flex: 0,
-                top: '50%',
-                right: '20px',
+                top: '75%',
+                right: '53%',
                 transform: 'translateY(-50%)',
                 zIndex: 1000, // High z-index to ensure it's on top
-                height: '10%'
+                height: '6%'
             }}
             onClick={() => {
                 handleSubmit(pool[index], true)
@@ -118,12 +124,12 @@ export default function VotingGallery({ pool, uuid, code, alerts, setAlerts }) {
             size="lg"
             style={{
                 position: 'absolute',
-                top: '50%',
-                left: '20px',
+                top: '75%',
+                left: '53%',
                 flex: 0,
                 transform: 'translateY(-50%)',
                 zIndex: 1000, // Same high z-index for this button
-                height: "10%"
+                height: "6%"
             }}
             onClick={() => { handleSubmit(pool[index], false) }}
         >{"No Vote"}  {/* button for testing purposes*/}

@@ -54,8 +54,8 @@
 .middle-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  flex: 1;
+  justify-content: flex-start;
+  flex: 3;
   border: black;
   border-radius: 2px;
   align-items: center;
@@ -68,8 +68,24 @@
 
 .middle-container-2 {
   display: flex;
-  flex: 1;
+  flex: 4;
   justify-content: center;
+  width: 30vw;
+  height: 80vh
+}
+
+.swiper-slide-title {
+  position: absolute;
+  top: 3%;
+  left: 30%;
+  width: 40%;
+  text-align: center;
+  padding: 25px 0; /* Adjust padding as needed */
+  background: rgba(0, 0, 0, 0.5); /* Optional: Adds a semi-transparent overlay for better readability */
+  font-size: 24px; /* Adjust font size as needed */
+  font-weight: bold;
+  color: white;
+  border-radius: 20px;
 }
 
 .middle-container-3 {
