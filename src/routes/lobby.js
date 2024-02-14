@@ -13,8 +13,9 @@ import Logo from "../assets/logo.svg";
 
 import { useSubscription, useQuery, useMutation } from "@apollo/client";
 import { LOBBY_PAGE_SUBSCRIPTION } from "../subscriptions";
-import { ADD_SUGGESTION, START_LOBBY } from "../mutations";
+import { ADD_SUGGESTION, START_LOBBY, SKIP_SUGGESTION } from "../mutations";
 import { GET_LOBBY_USERS } from "../queries";
+import Toasts from "../components/errors/Toasts";
 
 export default function LobbyPage() {
   const location = useLocation();
@@ -25,6 +26,8 @@ export default function LobbyPage() {
   const [submittedSuggestions, setSubmittedSuggestions] = useState([]);
   const [ownerID, setOwnerID] = useState('')
   const [lobbyState, setLobbyState] = useState('')
+  const [skipped, setSkipped] = useState(false)
+  const [alerts, setAlerts] = useState([])
   const navigate = useNavigate();
   
   
@@ -45,6 +48,8 @@ export default function LobbyPage() {
   });
 
   const [startLobby, { reset: startLobbyReset }] = useMutation(START_LOBBY);
+  
+  const [skipSuggestion, { reset: skipSuggestionReset }] = useMutation(SKIP_SUGGESTION); 
   
 
   useEffect(() => {
@@ -85,6 +90,33 @@ export default function LobbyPage() {
     }
   }, [lobby_users_subscription, lobby_users]);
 
+  function handleSkipSuggestion() {
+    skipSuggestion({
+      variables: {
+        uuid: uuid,
+        lobby_code: code
+      }
+    }).then((skipSuggestionResponse) => {
+      const { data: skipSuggestionData, error: skipSuggestionError } = skipSuggestionResponse;
+
+      if (skipSuggestionError) {
+        console.error(skipSuggestionError)
+        return;
+      }
+
+      if (skipSuggestionData) {
+        setSkipped(true)
+      }
+    }).catch((err) => {
+      setAlerts([...alerts, {
+        variant: 'danger',
+        title: 'Skip Suggestion Error',
+        desc: 'Error skipping a suggestion! Please try again.'
+      }])
+      console.error(err)
+    })
+  }
+
   function handleAddSuggestion() {
     if (inputValue) {
       addSuggestion({
@@ -99,7 +131,14 @@ export default function LobbyPage() {
             });
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          setAlerts([...alerts, {
+            variant: 'danger',
+            title: 'Add Suggestion Error',
+            desc: 'Error adding a suggestion! Please try again.'
+          }])
+          console.error(err)
+        });
       setInputValue("");
     }
   }
@@ -118,11 +157,19 @@ export default function LobbyPage() {
       if (startLobbyData) {
         navigate('/voting/' + passedState.code, { state: { name, code, uuid } }) 
       }
-    }).catch(console.error)
+    }).catch((err) => {
+      setAlerts([...alerts, {
+        variant: 'danger',
+        title: 'Start Lobby Error',
+        desc: 'Error starting lobby! Please try again.'
+      }])
+      console.error(err)
+    })
   };
 
   return (
     <>
+        <Toasts alerts={alerts} />
       <div className="container">
         <div className="col-left">
           <div className="logo">
@@ -152,12 +199,12 @@ export default function LobbyPage() {
             Your group code is:
             <div className="lobby-code">{passedState.code}</div>
           </div>
-          <InputField
+          {!skipped && <InputField
             buttonLabel="Add Suggestion"
             value={inputValue}
             setValue={setInputValue}
             onClick={handleAddSuggestion}
-          />
+          />}
           <div className="button-container">
             <Button
               onClick={handleStartLobby}
@@ -168,6 +215,17 @@ export default function LobbyPage() {
             >
               {lobbyState === 'READY_TO_START' ? "START" : "Waiting for host..."}
             </Button>
+            {!skipped && 
+              <Button
+                disabled={submittedSuggestions.length > 0}
+                onClick={handleSkipSuggestion}
+                className="ready-button user-view"
+                variant="secondary"
+                size="lg"
+              >
+                Skip Suggestion
+              </Button>
+            }
             {/* above, the check for whether the user viewing is host
                         is done by comparing the current user id to that of the host
                         on the DB i.e. (user.id === host.id) ? 'start' : 'waiting for host...')  */}

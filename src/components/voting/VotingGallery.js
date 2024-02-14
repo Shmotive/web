@@ -6,7 +6,7 @@ import { SUBMIT_VOTE } from "../../mutations";
 import 'swiper/css';
 import '../../assets/css/VotingGallery.css'
 
-export default function VotingGallery({ pool, uuid, code }) {
+export default function VotingGallery({ pool, uuid, code, alerts, setAlerts }) {
     const [index, setIndex] = useState(0);
     const [swiper, setSwiper] = useState(null)
     const [userVoteResults, setUserVoteResults] = useState([])
@@ -22,7 +22,6 @@ export default function VotingGallery({ pool, uuid, code }) {
             setIsFinishedVoting(true)
         }
         if (swiper) {
-            swiper.slideNext()
             submitVote({
                 variables: {
                     uuid: uuid,
@@ -33,10 +32,12 @@ export default function VotingGallery({ pool, uuid, code }) {
             }).then((submitVoteResponse) => {
                 console.log(submitVoteResponse)
                 const { data: submitVoteData, error: submitVoteError } = submitVoteResponse;
-
+                
                 if (submitVoteError) console.log(submitVoteError)
-
+                
                 if (submitVoteData) {
+                    console.log('successful vote')
+                    swiper.slideNext()
                     setUserVoteResults([...userVoteResults,
                     {
                         vote: submitVoteData.submitVote.yes_vote,
@@ -44,7 +45,14 @@ export default function VotingGallery({ pool, uuid, code }) {
                     }
                     ])
                 }
-            }).catch(err => console.log(err))
+            }).catch((err) => {
+                setAlerts([...alerts, {
+                    variant: 'danger',
+                    title: 'Vote Submission Error',
+                    desc: 'Error submitting a vote! Please try again.'
+                  }])
+                  console.error(err)
+            })
         }
     };
 

@@ -12,6 +12,7 @@
 
 .col-left {
   position: absolute;
+  left: 0;
   display: flex;
   flex-direction: column;
   gap: 5vh;
@@ -82,6 +83,7 @@
 .ready-button {
   bottom: 0;
   margin-bottom: 10%;
+  margin-right: 5px;
   background-color: #7ed7c1;
   border: none;
   border-radius: 8px;

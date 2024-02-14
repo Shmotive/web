@@ -1,4 +1,5 @@
 import "../assets/css/landing.css";
+import Logo from "../assets/logo.svg";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "react-bootstrap/Card";
@@ -14,6 +15,7 @@ import { useMutation, useLazyQuery } from '@apollo/client';
 import { CREATE_USER, CREATE_LOBBY, JOIN_LOBBY } from "../mutations";
 import { DEBUG_GET_USER } from "../queries";
 import { auth as firebaseAuth } from "../firebase-config";
+import Toasts from "../components/errors/Toasts";
 
 export default function LandingPage() {
 	const navigate = useNavigate();
@@ -22,6 +24,7 @@ export default function LandingPage() {
 	const [isCreate, setIsCreate] = useState(true);
 	const [isLoggedIn, setIsLoggedIn] = useState(!!firebaseAuth.currentUser);
 	const [isNavigating, setIsNavigating] = useState(false)
+	const [alerts, setAlerts] = useState([])
 
 	function navigateToLobby(code) {
 		const name = userName
@@ -36,14 +39,28 @@ export default function LandingPage() {
 				.then(() => {
 					console.log(`signed out and deleted anon user: ${firebaseAuth.currentUser}`);
 				})
-				.catch(console.error);
+				.catch((err) => {
+					setAlerts([...alerts, {
+						variant: 'danger',
+						title: 'Delete Anon User Error',
+						desc: 'Error deleting an anon user! Please try again.'
+					}])
+					console.error(err)
+				});
 		} else {
 			firebaseAuth
 				.signOut()
 				.then(() => {
 					console.log(`Signed out user: ${firebaseAuth.currentUser}`);
 				})
-				.catch(console.error);
+				.catch((err) => {
+					setAlerts([...alerts, {
+						variant: 'danger',
+						title: 'User Sign-out Error',
+						desc: 'Error signing out user! Please try again.'
+					}])
+					console.error(err)
+				});
 		}
 	}
 
@@ -67,7 +84,14 @@ export default function LandingPage() {
 				}
 				console.log(`Created lobby ${code}`)
 				navigateToLobby(code, uuid);
-			}).catch(console.error);
+			}).catch((err) => {
+				setAlerts([...alerts, {
+					variant: 'danger',
+					title: 'Create Lobby Error',
+					desc: 'Error creating Lobby! Please try again.'
+				}])
+				console.error(err)
+			});
 		} else {
 			joinLobby({
 				variables: {
@@ -84,7 +108,14 @@ export default function LandingPage() {
 				}
 
 				navigateToLobby(code, uuid);
-			}).catch(console.error);
+			}).catch((err) => {
+				setAlerts([...alerts, {
+					variant: 'danger',
+					title: 'Join Lobby Error',
+					desc: 'Error joining lobby! Please try again.'
+				}])
+				console.error(err)
+			});
 		}
 	}
 
@@ -111,12 +142,22 @@ export default function LandingPage() {
 
 					}).catch((err) => {
 						setIsNavigating(false);
+						setAlerts([...alerts, {
+							variant: 'danger',
+							title: 'Create User Error',
+							desc: 'Error creating user! Please try again.'
+						}])
 						console.error(err)
 					});
 				}).catch((err) => {
 					setIsNavigating(false);
-					console.error(err)
 					// TODO delete firebase user
+					setAlerts([...alerts, {
+						variant: 'danger',
+						title: 'Firebase User Error',
+						desc: 'Error creating Firebase user! Please try again.'
+					}])
+					console.error(err)
 				});
 		}
 		createOrJoinLobby();
@@ -148,7 +189,14 @@ export default function LandingPage() {
 						console.log(
 							`Logged in with motive username: ${userQueryData.DEBUG_getUser.username} `
 						);
-					}).catch(console.error);
+					}).catch(err => {
+						setAlerts([...alerts, {
+							variant: 'danger',
+							title: 'Login Error',
+							desc: 'Error logging in user! Please try again.'
+						}])
+						console.error(err)
+					});
 				}
 			}
 		});
@@ -158,9 +206,10 @@ export default function LandingPage() {
 
 	return (
 		<>
+			<Toasts alerts={alerts} />
 			<div className="landingBody">
 				<div className="card-container">
-					<Image className="landing-logo" src={require("../assets/shrug-smiley.jpg")} prefix="" />
+					<Image className="landing-logo" src={Logo} prefix="" />
 					<Card className="card" border="dark">
 						<Card.Body className="card-body">
 							<div className="button-wrapper">

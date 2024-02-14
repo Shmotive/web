@@ -66,3 +66,14 @@ mutation submitVote(
     }
 }
 `;
+
+export const SKIP_SUGGESTION = gql`
+mutation skipSuggestion(
+    $uuid: String!,
+    $lobby_code: String!
+) {
+  skipSuggestion(uuid: $uuid, lobby_code: $lobby_code) {
+    uuid
+  }
+}
+`
