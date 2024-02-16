@@ -56,7 +56,7 @@ export default function ResultsPage() {
             <div className="list-group">
                 <ListGroup 
                     as="ol" numbered>
-                    {resultsArray.map((result, idx) => {
+                    {resultsArray?.map((result, idx) => {
                         
                         if (idx < 3) {
                             return <ListGroup.Item 
