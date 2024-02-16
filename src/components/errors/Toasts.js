@@ -5,7 +5,6 @@ import ToastContainer from "react-bootstrap/ToastContainer";
 
 
 export default function Toasts({ alerts }) {
-    const [showToast, setShowToast] = useState(true)
 
     const [visibleToasts, setVisibleToasts] = useState(alerts.reduce((acc, _, index) => {
         acc[index] = true; // Initialize all toasts as visible

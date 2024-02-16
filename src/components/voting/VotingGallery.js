@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import Button from 'react-bootstrap/Button';
 import { useMutation } from "@apollo/client";
-import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { SUBMIT_VOTE } from "../../mutations";
 import 'swiper/css';
 import '../../assets/css/VotingGallery.css'
-import placeholderImage from  '../../assets/placeholder.png'
+import placeholderImage from '../../assets/placeholder.png'
 
 export default function VotingGallery({ pool, uuid, code, alerts, setAlerts }) {
     const [index, setIndex] = useState(0);
@@ -13,7 +13,7 @@ export default function VotingGallery({ pool, uuid, code, alerts, setAlerts }) {
     const [userVoteResults, setUserVoteResults] = useState([])
     const [isFinishedVoting, setIsFinishedVoting] = useState(false)
 
-    const [submitVote, { reset: submitVoteReset }] = useMutation(SUBMIT_VOTE);
+    const [submitVote] = useMutation(SUBMIT_VOTE);
 
     console.log(pool.length, index)
     console.log(typeof (code))
@@ -33,9 +33,9 @@ export default function VotingGallery({ pool, uuid, code, alerts, setAlerts }) {
             }).then((submitVoteResponse) => {
                 console.log(submitVoteResponse)
                 const { data: submitVoteData, error: submitVoteError } = submitVoteResponse;
-                
+
                 if (submitVoteError) console.log(submitVoteError)
-                
+
                 if (submitVoteData) {
                     console.log('successful vote')
                     swiper.slideNext()
@@ -51,8 +51,8 @@ export default function VotingGallery({ pool, uuid, code, alerts, setAlerts }) {
                     variant: 'danger',
                     title: 'Vote Submission Error',
                     desc: 'Error submitting a vote! Please try again.'
-                  }])
-                  console.error(err)
+                }])
+                console.error(err)
             })
         }
     };
@@ -64,7 +64,7 @@ export default function VotingGallery({ pool, uuid, code, alerts, setAlerts }) {
         <div className="middle-container">
             <div className="middle-container-1"></div>
             <div
-                
+
                 className="middle-container-2">
                 <Swiper
                     noSwiping={true}
@@ -76,11 +76,13 @@ export default function VotingGallery({ pool, uuid, code, alerts, setAlerts }) {
                 >
                     {pool.map(recommendation => {
                         return <SwiperSlide
-                            style={{ backgroundImage: `url(${placeholderImage})`,
-                                     backgroundSize: 'cover',
-                                     backgroundPosition: 'center 90%',
-                                     backgroundRepeat: 'no-repeat',
-                                     borderRadius: '25px'}}
+                            style={{
+                                backgroundImage: `url(${placeholderImage})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center 90%',
+                                backgroundRepeat: 'no-repeat',
+                                borderRadius: '25px'
+                            }}
                             key={recommendation.id}>
                             <div className="swiper-no-swiping swiper-slide-title">{recommendation.name}</div>
                         </SwiperSlide>

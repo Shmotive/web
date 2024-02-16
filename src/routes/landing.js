@@ -64,10 +64,10 @@ export default function LandingPage() {
 		}
 	}
 
-	const [getUserQuery, { client }] = useLazyQuery(DEBUG_GET_USER);
-	const [createUser, { reset: createUserReset }] = useMutation(CREATE_USER);
-	const [createLobby, { reset: createLobbyReset }] = useMutation(CREATE_LOBBY);
-	const [joinLobby, { reset: joinLobbyReset }] = useMutation(JOIN_LOBBY);
+	const [getUserQuery, { _client }] = useLazyQuery(DEBUG_GET_USER);
+	const [createUser, { _reset: createUserReset }] = useMutation(CREATE_USER);
+	const [createLobby, { _reset: createLobbyReset }] = useMutation(CREATE_LOBBY);
+	const [joinLobby, { _reset: joinLobbyReset }] = useMutation(JOIN_LOBBY);
 
 	async function createOrJoinLobby() {
 		const uuid = firebaseAuth.currentUser.uid
@@ -132,7 +132,6 @@ export default function LandingPage() {
 						},
 					}).then((createUserResponse) => {
 						const { data: createUserData, error: createUserError } = createUserResponse;
-						const uuid = createUserData.createUser.uuid;
 
 						if (createUserError) {
 							console.error(createUserError);
@@ -201,8 +200,8 @@ export default function LandingPage() {
 			}
 		});
 
-		return () => {unsub()}
-	}, [isNavigating]);
+		return () => { unsub() }
+	}, [isNavigating, alerts, getUserQuery]);
 
 	return (
 		<>

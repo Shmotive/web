@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 import Image from "react-bootstrap/Image";
 import Button from "react-bootstrap/Button";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import "../assets/css/lobby.css";
 import UserSlot from "../components/lobby/UserSlot";
 import InputField from "../components/lobby/InputField";
