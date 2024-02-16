@@ -1,0 +1,147 @@
+.landingBody {
+    background-image: url('../background_image.png');
+    background-repeat: no-repeat;
+    height: 100vh;
+    background-size: contain;
+    background-position: 25% 50%;
+}
+
+.card-container{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.left-col-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-basis: 10%;
+}
+
+.landing-logo {
+    margin-top: 3.0vh;
+    margin-left: 0.5vw; 
+    height: 8vh;
+    width: 8vw;
+}
+
+.card {
+    
+    backdrop-filter: blur(10px);
+    background-color: #FFFFFF95;
+    margin: 0;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    height: 100vh;
+    overflow: auto;
+} 
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 8vh 8vh 2vh 8vh;
+}
+
+.button-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem; 
+}
+
+
+.sign-out {
+    align-self: flex-end;
+    border-radius: 30px;
+    background-color: #F46F60;
+    border: none;
+    color: white;
+    padding: 1vh;
+}
+
+.sign-out:hover {
+    cursor: pointer;
+}
+
+
+.form-label {
+    display: block;
+    margin-bottom: 0.2rem;
+}
+
+.link-button:hover {
+    color: red;
+    cursor: pointer;
+}
+
+.whats-the-text {
+    font-size: 6vh;
+    font-weight: bold;
+    color: #525252;
+    text-align: left;
+    margin-bottom: 1vh;
+    flex-shrink: 1;
+}
+
+.form-label-2 {
+    display: block;
+    margin-bottom: 0.1rem;
+}
+
+.form-control, .lobby-button {
+    width: 100%;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    margin-top: 0.2rem;
+    margin-bottom: 1rem;
+    padding: 1vh;
+}
+
+.lobby-button {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+    border: none;
+    border-radius: 3px;
+    background-color: #F46F60;
+    color: white;
+}
+
+.lobby-button:hover {
+    cursor: pointer;
+}
+
+.small {
+    display: block;
+    text-align: center;
+    margin-top: 0.1rem;
+    margin-bottom: 0.1rem;
+}
+
+.link-button-container {
+    text-align: center;
+}
+
+.link-button {
+    background-color: transparent;
+    border-color: transparent;
+    text-decoration: none;
+    box-shadow: none;
+}
+
+.create-group-text {
+    font-size: 4vh;
+    font-weight: bold;
+    color: #525252;
+    text-align: left;
+    flex-shrink: 2;
+    
+}
+
+.help {
+    margin-bottom: 5vh;
+}
+
+.orangeText {
+    color: #F46F60;
+    flex-shrink: 2;
+}

@@ -1,135 +1,301 @@
-import { Outlet } from "react-router"
-import "./landing.css";
-import React, { useState, useRef } from "react";
-import { Link, useNavigate, useLoaderData } from "react-router-dom";
-import Card from 'react-bootstrap/Card';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import { getAuth, onAuthStateChanged, signInAnonymously } from "@firebase/auth";
-import auth from "../firebase-config"
+import "../assets/css/landing.css";
+import Logo from "../assets/logo.svg";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Card from "react-bootstrap/Card";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import {
+	deleteUser,
+	onAuthStateChanged,
+	signInAnonymously,
+} from "@firebase/auth";
 import { FormLabel, Image } from "react-bootstrap";
+import { useMutation, useLazyQuery } from '@apollo/client';
+import { CREATE_USER, CREATE_LOBBY, JOIN_LOBBY } from "../mutations";
+import { DEBUG_GET_USER } from "../queries";
+import { auth as firebaseAuth } from "../firebase-config";
+import Toasts from "../components/errors/Toasts";
 
-export default function LoginPage() {
+export default function LandingPage() {
 	const navigate = useNavigate();
-	const anon = getAuth();
-	const guestNameRef = useRef();
-	const codeRef = useRef('');
+	const [userName, setUserName] = useState("");
+	const [lobbyCode, setlobbyCode] = useState("");
 	const [isCreate, setIsCreate] = useState(true);
+	const [isLoggedIn, setIsLoggedIn] = useState(!!firebaseAuth.currentUser);
+	const [isNavigating, setIsNavigating] = useState(false)
+	const [alerts, setAlerts] = useState([])
 
-
-	function generateLobbyCode() {
-		// some random 4-character string generator
-	}
-
-	const handleFormSubmit = async (e) => {
-
-		e.preventDefault();
-
-		const guestName = guestNameRef.current.value;
-		const code = codeRef.current.value || "ABCD";
-		// we can use useRef in order to send the form's (guestname) value
-		// this means we don't need to track the changes of the input using
-		// state, so the component doesn't needlessly rerender
-
-
-		signInAnonymously(anon)
-			.then(() => {
-				// Signed in..
-				// step1: generate the lobby code: setCode(generateLobbyCode());
-				console.log('code generated')
-
-				// step2: route to /lobby/:code in one of several ways:
-
-				// using redirect, usenavigate, or usehistory -- all from reactrouter
-				navigate('/lobby/' + code, { state: { guestName, code } })
-			})
-			.catch((error) => {
-				const errorCode = error.code;
-				const errorMessage = error.message;
-				console.log(errorCode, errorMessage)
-				// ...
-			});
+	function navigateToLobby(code) {
+		const name = userName
+		navigate('/lobby/' + code, { state: { name, code, uuid: firebaseAuth.currentUser.uid } });
 	};
 
-	onAuthStateChanged(anon, (user) => {
-		if (user) {
-			// User is signed in, see docs for a list of available properties
-			// https://firebase.google.com/docs/reference/js/auth.user
-			console.log(user.uid);
-			// ...
+	function signOut() {
+		setIsLoggedIn(false);
+		if (firebaseAuth.currentUser.isAnonymous) {
+			// delete and sign out
+			deleteUser(firebaseAuth.currentUser)
+				.then(() => {
+					console.log(`signed out and deleted anon user: ${firebaseAuth.currentUser}`);
+				})
+				.catch((err) => {
+					setAlerts([...alerts, {
+						variant: 'danger',
+						title: 'Delete Anon User Error',
+						desc: 'Error deleting an anon user! Please try again.'
+					}])
+					console.error(err)
+				});
 		} else {
-			// User is signed out
-			// ...
+			firebaseAuth
+				.signOut()
+				.then(() => {
+					console.log(`Signed out user: ${firebaseAuth.currentUser}`);
+				})
+				.catch((err) => {
+					setAlerts([...alerts, {
+						variant: 'danger',
+						title: 'User Sign-out Error',
+						desc: 'Error signing out user! Please try again.'
+					}])
+					console.error(err)
+				});
 		}
-	});
+	}
 
-	return <>
-		<div style={{ position: "fixed", right: 0, top: 0, height: "100vh", width: "37vw", zIndex: '1' }}>
-			<Card border="dark" style={{ backdropFilter: 'blur(10px)', backgroundColor: '#FFFFFF95', margin: '0', padding: '20px', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)', height: "100vh" }}>
-				<Card.Body style={{ padding: '50px' }}>
-					<Card.Title className="mb-3">What's the Motive?</Card.Title>
-					<Card.Subtitle className="mb-2 mt-2">Create a Group</Card.Subtitle>
-					<Card.Text>Help decide the best location for everyone.</Card.Text>
-					<Form onSubmit={handleFormSubmit}>
-						<Form.Group className="mb-3" controlId="formGuestName">
-							<FormLabel style={{ display: 'block', marginBottom: '0.2rem' }}><small>Your Name</small></FormLabel>
-							<Form.Control
-								type="text"
-								placeholder=""
-								style={{ width: '97.5%', marginTop: "0.2rem", marginBottom: "0.2rem" }}
-								defaultValue={""} // had to do these last two properties 
-								ref={guestNameRef} // bc removing onChange makes the input read-only
-							// this gets around that somehow lol
-							/>
-							<div className="d-grid gap-2">
-								{!isCreate &&
-									<Form.Group className="mb-3" controlId="formLobbyCode">
-										<FormLabel style={{ display: 'block', marginBottom: '0.1rem' }}>
-											<small>Group code</small>
-										</FormLabel>
-										<Form.Control
-											type="text"
-											placeholder=""
-											style={{ width: '97.5%', marginTop: "0.2rem", marginBottom: "0.2rem" }}
-											defaultValue={""}
-											ref={codeRef}
-										/>
-									</Form.Group>}
-								<Button variant="light"
-									type="submit"
-									style={{
-										width: '100%',
-										marginTop: "0.2rem",
-										marginBottom: "0.2rem",
-										boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.3)'
-									}}
+	const [getUserQuery, { _client }] = useLazyQuery(DEBUG_GET_USER);
+	const [createUser, { _reset: createUserReset }] = useMutation(CREATE_USER);
+	const [createLobby, { _reset: createLobbyReset }] = useMutation(CREATE_LOBBY);
+	const [joinLobby, { _reset: joinLobbyReset }] = useMutation(JOIN_LOBBY);
+
+	async function createOrJoinLobby() {
+		const uuid = firebaseAuth.currentUser.uid
+		if (isCreate) {
+			createLobby({
+				variables: { uuid: uuid },
+			}).then((createLobbyResponse) => {
+				const { data: createLobbyData, error: createLobbyError } = createLobbyResponse;
+				const code = createLobbyData.createLobby.lobby_code;
+
+				if (createLobbyError) {
+					console.error(createLobbyError)
+					return;
+				}
+				console.log(`Created lobby ${code}`)
+				navigateToLobby(code, uuid);
+			}).catch((err) => {
+				setAlerts([...alerts, {
+					variant: 'danger',
+					title: 'Create Lobby Error',
+					desc: 'Error creating Lobby! Please try again.'
+				}])
+				console.error(err)
+			});
+		} else {
+			joinLobby({
+				variables: {
+					uuid: uuid,
+					lobby_code: lobbyCode,
+				},
+			}).then((joinLobbyResponse) => {
+				const { data: joinLobbyData, error: joinLobbyError } = joinLobbyResponse;
+				const code = joinLobbyData.joinLobby.lobby_code;
+
+				if (joinLobbyError) {
+					console.error(joinLobbyError)
+					return;
+				}
+
+				navigateToLobby(code, uuid);
+			}).catch((err) => {
+				setAlerts([...alerts, {
+					variant: 'danger',
+					title: 'Join Lobby Error',
+					desc: 'Error joining lobby! Please try again.'
+				}])
+				console.error(err)
+			});
+		}
+	}
+
+	async function handleFormSubmit(e) {
+		e.preventDefault();
+		setIsNavigating(true);
+		if (!firebaseAuth.currentUser) {
+			await signInAnonymously(firebaseAuth)
+				.then(async (userCredential) => {
+					await createUser({
+						variables: {
+							uuid: userCredential.user.uid,
+							username: userName,
+						},
+					}).then((createUserResponse) => {
+						const { data: createUserData, error: createUserError } = createUserResponse;
+
+						if (createUserError) {
+							console.error(createUserError);
+							return;
+						}
+						console.log(`Created user: ${createUserData.createUser.uuid}`);
+
+					}).catch((err) => {
+						setIsNavigating(false);
+						setAlerts([...alerts, {
+							variant: 'danger',
+							title: 'Create User Error',
+							desc: 'Error creating user! Please try again.'
+						}])
+						console.error(err)
+					});
+				}).catch((err) => {
+					setIsNavigating(false);
+					// TODO delete firebase user
+					setAlerts([...alerts, {
+						variant: 'danger',
+						title: 'Firebase User Error',
+						desc: 'Error creating Firebase user! Please try again.'
+					}])
+					console.error(err)
+				});
+		}
+		createOrJoinLobby();
+	}
+
+	useEffect(() => {
+		const unsub = onAuthStateChanged(firebaseAuth, (firebaseUser) => {
+			if (!isNavigating) {
+				if (!firebaseUser) {
+					// signed out case
+					console.log("signed out case")
+					setIsLoggedIn(false)
+					setUserName("")
+					return;
+				} else {
+					// saved user case
+					console.log("saved user case")
+					setIsLoggedIn(true)
+					console.log(`Logged in with firebase uid: ${firebaseUser.uid}`);
+					getUserQuery({
+						variables: { uuid: firebaseUser.uid },
+					}).then((userQueryResponse) => {
+						const { data: userQueryData, error: userQueryError } = userQueryResponse;
+						if (userQueryError) {
+							console.error(userQueryError);
+							return; // returns undefined and resolves the .then() in the case that a user matching the input uuid was not found
+						}
+						setUserName(`${userQueryData.DEBUG_getUser.username}`);
+						console.log(
+							`Logged in with motive username: ${userQueryData.DEBUG_getUser.username} `
+						);
+					}).catch(err => {
+						setAlerts([...alerts, {
+							variant: 'danger',
+							title: 'Login Error',
+							desc: 'Error logging in user! Please try again.'
+						}])
+						console.error(err)
+					});
+				}
+			}
+		});
+
+		return () => { unsub() }
+	}, [isNavigating, alerts, getUserQuery]);
+
+	return (
+		<>
+			<Toasts alerts={alerts} />
+			<div className="landingBody">
+				<div className="card-container">
+					<Image className="landing-logo" src={Logo} prefix="" />
+					<Card className="card" border="dark">
+						<Card.Body className="card-body">
+							<div className="button-wrapper">
+								{isLoggedIn && (
+									<Button className="sign-out" onClick={signOut}>
+										Sign out
+									</Button>
+								)}
+							</div>
+							<Card.Title className="whats-the-text">
+								What's the <span className="orangeText">Motive</span>?
+							</Card.Title>
+							<Card.Subtitle className="create-group-text">
+								Create or join a lobby
+							</Card.Subtitle>
+							<Card.Text className="help">
+								Help decide the best location for everyone.
+							</Card.Text>
+							<Form
+								onSubmit={(e) => {
+									handleFormSubmit(e);
+								}}
+							>
+								<Form.Group controlId="formGuestName">
+									<FormLabel className="form-label">
+										<small>Your Name</small>
+									</FormLabel>
+									<Form.Control
+										className="form-control"
+										disabled={isLoggedIn} // this field is disabled when a user is already signed in
+										type="text"
+										placeholder=""
+										value={userName}
+										onChange={(e) => {
+											setUserName(e.target.value);
+										}}
+									/>
+									<div>
+										{!isCreate && (
+											<Form.Group controlId="formLobbyCode">
+												<FormLabel className="form-label-2">
+													<small>Lobby code</small>
+												</FormLabel>
+												<Form.Control
+													className="form-control"
+													type="text"
+													placeholder=""
+													value={lobbyCode}
+													onChange={(e) => {
+														setlobbyCode(e.target.value);
+													}}
+												/>
+											</Form.Group>
+										)}
+										<Button
+											disabled={
+												userName.length === 0 ||
+												(!isCreate && lobbyCode.length === 0)
+											}
+											variant="light"
+											type="submit"
+											className="lobby-button"
+										>
+											{isCreate ? "Create Lobby" : "Join Lobby"}
+										</Button>
+									</div>
+								</Form.Group>
+							</Form>
+							<small className="small"> or </small>
+							<div className="link-button-container">
+								<Button
+									variant="link"
+									size="sm"
+									className="link-button"
+									onClick={() => setIsCreate(!isCreate)}
 								>
-									{isCreate === true ? "Create Lobby" : "Join Lobby"}
+									{isCreate ? "Join a lobby" : "Create a lobby"}
 								</Button>
 							</div>
-						</Form.Group>
-					</Form>
-					<small style={{ display: "block", textAlign: "center", marginTop: "0.3rem", marginBottom: "0.3rem" }}> or </small>
-					<div style={{ textAlign: "center" }}>
-						<Button variant="link" size="sm"
-							style={{
-								backgroundColor: 'transparent',
-								borderColor: 'transparent',
-								textDecoration: 'none',
-								boxShadow: 'none'
-							}}
-							className="link-button"
-							onClick={() => setIsCreate(!isCreate)}>
-							{isCreate === true ? "Join a group" : "Create a group"}
-						</Button>
-					</div>
-				</Card.Body>
-			</Card>
-		</div>
-
-	</>
+						</Card.Body>
+					</Card>
+				</div>
+			</div>
+		</>
+	);
 }
 
 export async function loader() {
-	return null
+	return null;
 }

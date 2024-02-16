@@ -1,0 +1,99 @@
+.swiper {
+    width: 100%;
+    height: 100%;
+  }
+  
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: gray;
+
+  /* Center slide text vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+  
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.voting-finished-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7); /* Adjust color and opacity for blur effect */
+  display: flex;
+  justify-content: center;
+  align-items:center;
+  font-size: 24px; /* Adjust as needed */
+  z-index: 1100; /* Above the buttons */
+  backdrop-filter: blur(5px); /* This will give the blur effect */
+}
+ 
+
+/* Container flex styling */
+
+.full-container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.left-container {
+  flex: 1;
+}
+
+.middle-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex: 3;
+  border: black;
+  border-radius: 2px;
+  align-items: center;
+}
+
+.middle-container-1 {
+  display: flex;
+  flex: 1
+}
+
+.middle-container-2 {
+  display: flex;
+  flex: 4;
+  justify-content: center;
+  width: 30vw;
+  height: 80vh
+}
+
+.swiper-slide-title {
+  position: absolute;
+  top: 3%;
+  left: 30%;
+  width: 40%;
+  text-align: center;
+  padding: 25px 0; /* Adjust padding as needed */
+  background: rgba(0, 0, 0, 0.5); /* Optional: Adds a semi-transparent overlay for better readability */
+  font-size: 24px; /* Adjust font size as needed */
+  font-weight: bold;
+  color: white;
+  border-radius: 20px;
+}
+
+.middle-container-3 {
+  display: flex;
+  flex: 1;
+}
+
+.right-container {
+  flex: 1;
+}
+
