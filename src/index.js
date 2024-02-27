@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
+// import { config } from 'dotenv';
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import {
@@ -15,11 +16,13 @@ import { GraphQLWsLink } from "@apollo/client/link/subscriptions"; // subcriptio
 import { createClient } from "graphql-ws"; // subscription setup
 
 const httpLink = new HttpLink({
-  uri: "http://" + process.env.REACT_APP_SERVER_ENDPOINT,
+  uri: process.env.REACT_APP_SERVER_ENDPOINT,
 });
 
+
+
 const wsLink = new GraphQLWsLink(createClient({ //GQL subscription setup
-  url: 'ws://' + process.env.REACT_APP_SERVER_ENDPOINT,
+  url: process.env.REACT_APP_WS_ENDPOINT,
   options: {
     reconnect: true,
   }                       // subscriptions using ws only happen past the landing page,
