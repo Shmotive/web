@@ -60,4 +60,4 @@ jobs:
           path: ./build
 
       - name: serving with pm2
-        run: npx pm2 -f serve ./build/ 80 
+        run: npx pm2 serve ./build/ 80 -f
