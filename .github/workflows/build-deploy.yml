@@ -43,7 +43,7 @@ jobs:
   deploy:
     name: Deploy
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     if: github.ref == 'refs/heads/main'
 
     permissions:
@@ -59,8 +59,5 @@ jobs:
           name: production-files
           path: ./build
 
-      - name: Deploying to gh-pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+      - name: serving with pm2
+        run: npx pm2 serve ./build/ 80
