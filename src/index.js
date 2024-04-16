@@ -15,11 +15,11 @@ import { GraphQLWsLink } from "@apollo/client/link/subscriptions"; // subcriptio
 import { createClient } from "graphql-ws"; // subscription setup
 
 const httpLink = new HttpLink({
-  uri: "http://" + process.env.REACT_APP_SERVER_ENDPOINT,
+  uri: "https://" + process.env.REACT_APP_SERVER_ENDPOINT,
 });
 
 const wsLink = new GraphQLWsLink(createClient({ //GQL subscription setup
-  url: 'ws://' + process.env.REACT_APP_SERVER_ENDPOINT,
+  url: 'wss://' + process.env.REACT_APP_SERVER_ENDPOINT,
   options: {
     reconnect: true,
   }                       // subscriptions using ws only happen past the landing page,
