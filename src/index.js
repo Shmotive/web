@@ -19,7 +19,7 @@ const httpLink = new HttpLink({
 });
 
 const wsLink = new GraphQLWsLink(createClient({ //GQL subscription setup
-  url: 'wss://' + process.env.REACT_APP_SERVER_ENDPOINT,
+  url: 'wss://' + process.env.REACT_APP_SERVER_ENDPOINT + ':443',
   options: {
     reconnect: true,
   }                       // subscriptions using ws only happen past the landing page,
