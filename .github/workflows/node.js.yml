@@ -1,0 +1,28 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Installing NPM packages
+      run: yarn install
+
+    - name: Building project
+      env:
+        CI: ""
+        REACT_APP_SERVER_ENDPOINT: "54.196.168.86:4000/graphql"
+      run: npm run build
+
+    - run: npx pm2 serve build/ 80

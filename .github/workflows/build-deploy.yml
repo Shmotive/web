@@ -28,8 +28,8 @@ jobs:
       - name: Building project
         env:
           CI: ""
-          REACT_APP_SERVER_ENDPOINT: "https://api.whatsthemotive.app:4000/graphql"
-          REACT_APP_WS_ENDPOINT: "wss://api.whatsthemotive.app:4000/graphql"
+          REACT_APP_SERVER_ENDPOINT: "https://api.whatsthemotive.app"
+          REACT_APP_SERVER_ENDPOINT_WSS: "wss://api.whatsthemotive.app:443/graphql"
         run: npm run build
 
       - name: Running tests
@@ -44,7 +44,7 @@ jobs:
   deploy:
     name: Deploy
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     if: github.ref == 'refs/heads/main'
 
     permissions:
@@ -60,8 +60,5 @@ jobs:
           name: production-files
           path: ./build
 
-      - name: Deploying to gh-pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+      - name: serving with pm2
+        run: npx pm2 restart all
