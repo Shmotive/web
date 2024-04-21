@@ -28,7 +28,8 @@ jobs:
       - name: Building project
         env:
           CI: ""
-          REACT_APP_SERVER_ENDPOINT: "api.whatsthemotive.app"
+          REACT_APP_SERVER_ENDPOINT: "https://api.whatsthemotive.app"
+          REACT_APP_SERVER_ENDPOINT_WSS: "wss://api.whatsthemotive.app:443/graphql"
         run: npm run build
 
       - name: Running tests
