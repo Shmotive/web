@@ -28,17 +28,27 @@ export default function VotingPage() {
         }
     });
 
-    // FISHER-YATES SORTING ALGORITHM: PSEUDO-RANDOMLY SHUFFLES ELEMENTS IN AN ARRAY
+    // PSEUDO-RANDOMLY SHUFFLES ELEMENTS IN AN ARRAY
+    // this happens every time there's a change in subscription data. Bad.
 
     function shuffleArray(arr) {
-        var i = arr.length, j, temp;
-        while(--i > 0){
-          j = Math.floor(Math.random()*(i+1));
-          temp = {...arr[j]};
-          arr[j] = {...arr[i]};
-          arr[i] = {...temp};
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]]; // Swap elements
         }
-      }
+        return;
+    }
+
+    // Splitting the query and subscription updates into two useEffects:
+    //
+    // we only want shuffling to happen once when the voting stage begins (on component mount),
+    // not every time there is some update to the data.
+    // 
+    // Before, both the querydata and the subscriptiondata were in the same 
+    // dependency array for one useeffect, meaning that the useEffect would trigger every time
+    // there was an update to either. On each call to the contents of the useEffect, the shuffling would
+    // occur because the querydata was still defined from the beginning meaning that it would go into the
+    // lobbyquerydata code block and shuffle. 
 
     useEffect(() => {
         if (lobbyQueryError) {
@@ -54,9 +64,29 @@ export default function VotingPage() {
             // Combine custom and generated recommendation arrays into one array when the component loads 
             console.log(lobbyQueryData.getLiveLobby.custom_recommendations, lobbyQueryData.getLiveLobby.generated_recommendations)
             let combinedArray = lobbyQueryData.getLiveLobby.custom_recommendations.concat(lobbyQueryData.getLiveLobby.generated_recommendations);
-            console.log(combinedArray)
-            setRecommendationsArray(combinedArray)
+            console.log(combinedArray);
+            shuffleArray(combinedArray);
+            setRecommendationsArray(combinedArray);
         }
+    }, [lobbyQueryData, lobbyQueryError])
+
+    useEffect(() => {
+        // if (lobbyQueryError) {
+        //     setAlerts([...alerts, {
+        //         variant: 'danger',
+        //         title: 'Recommendation Query Error',
+        //         desc: 'Error getting recommendations! Please try again.'
+        //       }])
+        //       console.error(lobbyQueryError)
+        //       return;
+        // }
+        // if (lobbyQueryData) {
+        //     // Combine custom and generated recommendation arrays into one array when the component loads 
+        //     console.log(lobbyQueryData.getLiveLobby.custom_recommendations, lobbyQueryData.getLiveLobby.generated_recommendations)
+        //     let combinedArray = lobbyQueryData.getLiveLobby.custom_recommendations.concat(lobbyQueryData.getLiveLobby.generated_recommendations);
+        //     console.log(combinedArray);
+        //     setRecommendationsArray(combinedArray);
+        // }
         if (lobbySubscriptionError) {
             setAlerts([...alerts, {
                 variant: 'danger',
@@ -75,7 +105,7 @@ export default function VotingPage() {
                 navigate('/results/' + code, { state: { code, uuid } })
             }
         }
-    }, [lobbyQueryData, lobbySubscriptionData, lobbySubscriptionError, lobbyQueryError])
+    }, [lobbySubscriptionData, lobbySubscriptionError])
 
     console.log(recommendationsArray, subscriptionData)
 

@@ -231,3 +231,7 @@
     width: 50%;
   }
 }
+
+.pac-container {
+  z-index: 1056 !important;
+}
