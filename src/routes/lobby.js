@@ -3,14 +3,12 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import {Image, Button, Modal, ModalHeader, ModalTitle, ModalBody} from "react-bootstrap";
-import React, { useCallback, useEffect, useState, useRef, useMemo } from "react";
+import {Image, Button} from "react-bootstrap";
+import React, { useEffect, useState } from "react";
 import "../assets/css/lobby.css";
 import UserSlot from "../components/lobby/UserSlot";
 import InputField from "../components/lobby/InputField";
 import Logo from "../assets/logo.svg";
-import { useMapsLibrary, APIProvider } from "@vis.gl/react-google-maps";
-import debounce from 'lodash.debounce';
 import { useSubscription, useQuery, useMutation } from "@apollo/client";
 import { LOBBY_PAGE_SUBSCRIPTION } from "../subscriptions";
 import { ADD_SUGGESTION, START_LOBBY, SKIP_SUGGESTION } from "../mutations";
@@ -27,8 +25,6 @@ export default function LobbyPage() {
   const [ownerID, setOwnerID] = useState('');
   const [lobbyState, setLobbyState] = useState('');
   const [skipped, setSkipped] = useState(false);
-  const [modalShow, setModalShow] = useState(false);
-  const [selectedPlace, setSelectedPlace] = useState(null);
   const [alerts, setAlerts] = useState([]);
   const navigate = useNavigate();
   
@@ -40,7 +36,7 @@ export default function LobbyPage() {
     }
   );
   
-  const [addSuggestion, { reset: addSuggestionReset }] = useMutation(ADD_SUGGESTION);
+  const [addSuggestion, { _reset: addSuggestionReset }] = useMutation(ADD_SUGGESTION);
   
   const {
     data: lobby_users_subscription,
@@ -49,9 +45,9 @@ export default function LobbyPage() {
     variables: { lobby_code: code, uuid: uuid },
   });
 
-  const [startLobby, { reset: startLobbyReset }] = useMutation(START_LOBBY);
+  const [startLobby, { _reset: startLobbyReset }] = useMutation(START_LOBBY);
   
-  const [skipSuggestion, { reset: skipSuggestionReset }] = useMutation(SKIP_SUGGESTION); 
+  const [skipSuggestion, { _reset: skipSuggestionReset }] = useMutation(SKIP_SUGGESTION); 
   
 
   useEffect(() => {
@@ -169,81 +165,6 @@ export default function LobbyPage() {
       console.error(err)
     })
   };
-
-  function RecommendationModal(props) {
-    return (
-      <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Enter your preferred location or find it on the map!
-          </Modal.Title>
-        </Modal.Header>
-        <ModalBody>
-          <div className="autocomplete-control">
-            <PlaceAutocomplete onPlaceSelect={setSelectedPlace} />
-          </div>
-        </ModalBody>
-        <Modal.Footer>
-          <Button 
-            onClick={props.onHide}
-            variant="secondary"
-            size="sm"
-            >Close
-            </Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
-
-
-  // given template from google, minus debouncer
-
-  const PlaceAutocomplete = ({ onPlaceSelect }) => {
-    const [placeAutocomplete, setPlaceAutocomplete] = useState(null);
-    const inputRef = useRef(null);
-    const places = useMapsLibrary("places");
-  
-    useEffect(() => {
-      if (!places || !inputRef.current) return;
-  
-      const options = {
-        fields: ["place_id", "geometry", "name", "formatted_address"],
-      };
-  
-      setPlaceAutocomplete(new places.Autocomplete(inputRef.current, options));
-    }, [places]);
-
-    const handlePlaceChanged = useCallback(() => {
-      if (!placeAutocomplete) return;
-      onPlaceSelect(placeAutocomplete.getPlace());  
-    }, [onPlaceSelect, placeAutocomplete]);
-
-    const debouncedHandlePlaceChanged = useMemo(
-      () => debounce(handlePlaceChanged, 400),
-      [handlePlaceChanged]
-    );
-
-    useEffect(() => {
-      if (!placeAutocomplete) return;
-  
-      const listener = placeAutocomplete.addListener("place_changed", debouncedHandlePlaceChanged);
-
-      return () => {
-        window.google.maps.event.removeListener(listener);
-      };
-    }, [onPlaceSelect, placeAutocomplete]);
-    
-    return (
-      <div className="autocomplete-container">
-        <input ref={inputRef} />
-      </div>
-    );
-  };
   
   return (
     <>
@@ -303,22 +224,6 @@ export default function LobbyPage() {
               >
                 Skip Suggestion
               </Button>
-            }
-            {uuid == ownerID &&
-              <>
-                <Button
-                  className="ready-button user-view"
-                  variant="secondary"
-                  size="lg"
-                  onClick={() => setModalShow(true)}
-                >
-                  Generate Recs
-                </Button>
-                <RecommendationModal
-                  show={modalShow}
-                  onHide={() => setModalShow(false)}
-                />
-              </>
             }
             {/* above, the check for whether the user viewing is host
                         is done by comparing the current user id to that of the host

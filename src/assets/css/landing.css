@@ -54,6 +54,7 @@
 
 .sign-out {
     align-self: flex-end;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
     border-radius: 30px;
     background-color: #F46F60;
     border: none;
@@ -63,8 +64,13 @@
 
 .sign-out:hover {
     cursor: pointer;
+    background-color: #dddada;
 }
 
+.sign-out:active {
+    cursor: pointer;
+    background-color: #dddada;
+}
 
 .form-label {
     display: block;
@@ -145,3 +151,60 @@
     color: #F46F60;
     flex-shrink: 2;
 }
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-body-text {
+    font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto,
+    "Helvetica Neue", sans-serif;
+    text-align: center;
+    margin-top: 0.1rem;
+    margin-bottom: 0.6rem;
+}
+
+.autocomplete-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.autocomplete-control {
+    width: 100%;
+}
+
+.location-modal-button {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    background-color: #F46F60;
+    border: none;
+    color: white;
+}
+
+.location-modal-button:hover {
+    cursor: pointer;
+    background-color: #dddada;
+}
+
+.location-modal-button:active {
+    cursor: pointer;
+    background-color: #dddada;
+}
+
+.modal-body-text-2 {
+    font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto,
+    "Helvetica Neue", sans-serif;
+    text-align: center;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 1000;
+}
+
+.pac-container {
+    z-index: 1056 !important;
+  }
+

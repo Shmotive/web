@@ -16,7 +16,7 @@ import { getMainDefinition } from "@apollo/client/utilities";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions"; // subcription setup
 import { createClient } from "graphql-ws"; // subscription setup
 
-const API_KEY = process.env.GOOGLE_MAPS_API_KEY;
+const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
 const httpLink = new HttpLink({
   uri: process.env.REACT_APP_SERVER_ENDPOINT,

@@ -166,7 +166,7 @@
 }
 
 .suggestion-button {
-  background-color: #525252;
+  background-color: #F46F60;;
   border: none;
   color: #ffffff;
   cursor: pointer;
@@ -230,8 +230,4 @@
   .suggestion-button {
     width: 50%;
   }
-}
-
-.pac-container {
-  z-index: 1056 !important;
 }

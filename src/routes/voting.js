@@ -28,13 +28,10 @@ export default function VotingPage() {
         }
     });
 
-    // PSEUDO-RANDOMLY SHUFFLES ELEMENTS IN AN ARRAY
-    // this happens every time there's a change in subscription data. Bad.
-
     function shuffleArray(arr) {
         for (let i = arr.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [arr[i], arr[j]] = [arr[j], arr[i]]; // Swap elements
+            [arr[i], arr[j]] = [arr[j], arr[i]]; 
         }
         return;
     }
@@ -71,22 +68,6 @@ export default function VotingPage() {
     }, [lobbyQueryData, lobbyQueryError])
 
     useEffect(() => {
-        // if (lobbyQueryError) {
-        //     setAlerts([...alerts, {
-        //         variant: 'danger',
-        //         title: 'Recommendation Query Error',
-        //         desc: 'Error getting recommendations! Please try again.'
-        //       }])
-        //       console.error(lobbyQueryError)
-        //       return;
-        // }
-        // if (lobbyQueryData) {
-        //     // Combine custom and generated recommendation arrays into one array when the component loads 
-        //     console.log(lobbyQueryData.getLiveLobby.custom_recommendations, lobbyQueryData.getLiveLobby.generated_recommendations)
-        //     let combinedArray = lobbyQueryData.getLiveLobby.custom_recommendations.concat(lobbyQueryData.getLiveLobby.generated_recommendations);
-        //     console.log(combinedArray);
-        //     setRecommendationsArray(combinedArray);
-        // }
         if (lobbySubscriptionError) {
             setAlerts([...alerts, {
                 variant: 'danger',
