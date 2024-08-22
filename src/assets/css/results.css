@@ -34,4 +34,19 @@
     position: absolute;
     top: 1%;
     right: 0.5%;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    background-color: #F46F60;
+    border: none;
+    color: white;
+}
+
+.homebutton:hover {
+    cursor: pointer;
+    background-color: #dddada;
+}
+
+.homebutton:active {
+    cursor: pointer;
+    background-color: #dddada;
 }

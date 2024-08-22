@@ -3,14 +3,12 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import Image from "react-bootstrap/Image";
-import Button from "react-bootstrap/Button";
+import {Image, Button} from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import "../assets/css/lobby.css";
 import UserSlot from "../components/lobby/UserSlot";
 import InputField from "../components/lobby/InputField";
 import Logo from "../assets/logo.svg";
-
 import { useSubscription, useQuery, useMutation } from "@apollo/client";
 import { LOBBY_PAGE_SUBSCRIPTION } from "../subscriptions";
 import { ADD_SUGGESTION, START_LOBBY, SKIP_SUGGESTION } from "../mutations";
@@ -24,10 +22,10 @@ export default function LobbyPage() {
   const [users, setUsers] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [submittedSuggestions, setSubmittedSuggestions] = useState([]);
-  const [ownerID, setOwnerID] = useState('')
-  const [lobbyState, setLobbyState] = useState('')
-  const [skipped, setSkipped] = useState(false)
-  const [alerts, setAlerts] = useState([])
+  const [ownerID, setOwnerID] = useState('');
+  const [lobbyState, setLobbyState] = useState('');
+  const [skipped, setSkipped] = useState(false);
+  const [alerts, setAlerts] = useState([]);
   const navigate = useNavigate();
   
   
@@ -38,7 +36,7 @@ export default function LobbyPage() {
     }
   );
   
-  const [addSuggestion, { reset: addSuggestionReset }] = useMutation(ADD_SUGGESTION);
+  const [addSuggestion, { _reset: addSuggestionReset }] = useMutation(ADD_SUGGESTION);
   
   const {
     data: lobby_users_subscription,
@@ -47,9 +45,9 @@ export default function LobbyPage() {
     variables: { lobby_code: code, uuid: uuid },
   });
 
-  const [startLobby, { reset: startLobbyReset }] = useMutation(START_LOBBY);
+  const [startLobby, { _reset: startLobbyReset }] = useMutation(START_LOBBY);
   
-  const [skipSuggestion, { reset: skipSuggestionReset }] = useMutation(SKIP_SUGGESTION); 
+  const [skipSuggestion, { _reset: skipSuggestionReset }] = useMutation(SKIP_SUGGESTION); 
   
 
   useEffect(() => {
@@ -89,6 +87,7 @@ export default function LobbyPage() {
       setLobbyState(lobby_users.getLiveLobby.state)
     }
   }, [lobby_users_subscription, lobby_users]);
+
 
   function handleSkipSuggestion() {
     skipSuggestion({
@@ -166,7 +165,7 @@ export default function LobbyPage() {
       console.error(err)
     })
   };
-
+  
   return (
     <>
         <Toasts alerts={alerts} />

@@ -45,7 +45,6 @@ export default function ResultsPage() {
     return <>
         <div className='main-container'>
             <Button className='homebutton' 
-                    variant='danger'
                     onClick={handleOnClick}>
                         Back to Homepage
             </Button> 
@@ -61,7 +60,7 @@ export default function ResultsPage() {
                         if (idx < 3) {
                             return <ListGroup.Item 
                                         as='li'
-                                        variant="success"
+                                        variant="danger"
                                         className="d-flex justify-content-between align-items-start"
                                         key={result.id}>
                                         <div className="ms-2 me-auto">
@@ -70,9 +69,6 @@ export default function ResultsPage() {
                                             </div>
                                             {result.category}
                                         </div>
-                                        <Badge bg="primary" pill>
-                                            x votes
-                                        </Badge>
                                     </ListGroup.Item>
                         } else {
                             return <ListGroup.Item 
@@ -86,9 +82,6 @@ export default function ResultsPage() {
                                             </div>
                                             {result.category}
                                         </div>
-                                        <Badge bg="primary" pill>
-                                            x votes
-                                        </Badge>
                                     </ListGroup.Item>
                         }
                     })}

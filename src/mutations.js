@@ -11,8 +11,8 @@ export const CREATE_USER = gql`
 `;
 
 export const CREATE_LOBBY = gql`
-  mutation CreateLobby($uuid: String!) {
-    createLobby(uuid: $uuid) {
+  mutation CreateLobby($uuid: String!, $latitude: Float!, $longitude: Float!, $postal_code: String) {
+    createLobby(uuid: $uuid, latitude: $latitude, longitude: $longitude, postal_code: $postal_code) {
       lobby_code
     }
   }

@@ -4,8 +4,8 @@ import { useMutation } from "@apollo/client";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { SUBMIT_VOTE } from "../../mutations";
 import 'swiper/css';
-import '../../assets/css/VotingGallery.css'
-import placeholderImage from '../../assets/placeholder.png'
+import '../../assets/css/VotingGallery.css';
+import placeholderImage from '../../assets/voting_backgrounds/placeholder.png';
 
 export default function VotingGallery({ pool, uuid, code, alerts, setAlerts }) {
     const [index, setIndex] = useState(0);

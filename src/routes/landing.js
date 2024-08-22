@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import { Modal, ModalBody } from "react-bootstrap"; 
 import {
 	deleteUser,
 	onAuthStateChanged,
@@ -16,15 +17,18 @@ import { CREATE_USER, CREATE_LOBBY, JOIN_LOBBY } from "../mutations";
 import { DEBUG_GET_USER } from "../queries";
 import { auth as firebaseAuth } from "../firebase-config";
 import Toasts from "../components/errors/Toasts";
+import PlaceAutocomplete from "../components/landing/PlaceAutocomplete";
 
 export default function LandingPage() {
 	const navigate = useNavigate();
 	const [userName, setUserName] = useState("");
 	const [lobbyCode, setlobbyCode] = useState("");
+	const [selectedPlace, setSelectedPlace] = useState(null);
 	const [isCreate, setIsCreate] = useState(true);
 	const [isLoggedIn, setIsLoggedIn] = useState(!!firebaseAuth.currentUser);
-	const [isNavigating, setIsNavigating] = useState(false)
-	const [alerts, setAlerts] = useState([])
+	const [isNavigating, setIsNavigating] = useState(false);
+	const [modalShow, setModalShow] = useState(false);
+	const [alerts, setAlerts] = useState([]);
 
 	function navigateToLobby(code) {
 		const name = userName
@@ -73,7 +77,11 @@ export default function LandingPage() {
 		const uuid = firebaseAuth.currentUser.uid
 		if (isCreate) {
 			createLobby({
-				variables: { uuid: uuid },
+				variables: { 
+					uuid: uuid,
+					latitude: selectedPlace?.geometry?.location?.lat(),
+					longitude: selectedPlace?.geometry?.location?.lng(),
+					postal_code: selectedPlace?.address_components.filter((component) => {return component.types.includes("postal_code")})[0]?.long_name} || null
 			}).then((createLobbyResponse) => {
 				const { data: createLobbyData, error: createLobbyError } = createLobbyResponse;
 				const code = createLobbyData.createLobby.lobby_code;
@@ -203,6 +211,63 @@ export default function LandingPage() {
 		return () => { unsub() }
 	}, [isNavigating, alerts, getUserQuery]);
 
+	function modalSubmitHandler(e) {
+		e.preventDefault();
+		if (!selectedPlace) {
+			setAlerts([...alerts, {
+				variant: 'danger',
+				title: 'Lobby Creation Error',
+				desc: 'Unable to confirm selected location. Please try again.'
+			}])
+			return;
+		}
+		setModalShow(false);
+		handleFormSubmit(e);
+	};
+
+	function LocationSelection(props) {
+		return (
+			<Modal
+			  {...props}
+			  size="lg"
+			  aria-labelledby="contained-modal-title-vcenter"
+			  centered
+			>
+			  <Modal.Header className="modal-header" >
+				<Modal.Title id="contained-modal-title-vcenter">
+				  Location Selection
+				</Modal.Title>
+			  </Modal.Header>
+			  <ModalBody>
+			  	<div className="modal-body-text">
+				{!selectedPlace ? `Please select a valid location` : `Selected Location: ${selectedPlace.name}`}
+				</div>
+				<div className="autocomplete-control">
+					<PlaceAutocomplete onPlaceSelect={setSelectedPlace} alerts={alerts} setAlerts={setAlerts}/>
+				</div>
+				<div className="modal-body-text-2">
+				Tip: We'll use your selected location to recommend your lobby some activities!
+				</div>
+			  </ModalBody>
+			  <Modal.Footer>
+				<Button 
+				  onClick={props.onHide}
+				  variant="secondary"
+				  size="sm"
+				  >Cancel
+				</Button>
+				<Button
+				 onClick={modalSubmitHandler}
+				 className="location-modal-button"
+				 size="sm"
+				 type="button">
+				  Confirm Location & Create Lobby
+				</Button>
+			  </Modal.Footer>
+			</Modal>
+		  );
+	}
+
 	return (
 		<>
 			<Toasts alerts={alerts} />
@@ -228,9 +293,10 @@ export default function LandingPage() {
 								Help decide the best location for everyone.
 							</Card.Text>
 							<Form
-								onSubmit={(e) => {
-									handleFormSubmit(e);
-								}}
+								onSubmit={!isCreate ? (e) => handleFormSubmit(e) : (e) => {
+									e.preventDefault();
+									setModalShow(true);}
+								}
 							>
 								<Form.Group controlId="formGuestName">
 									<FormLabel className="form-label">
@@ -291,6 +357,10 @@ export default function LandingPage() {
 						</Card.Body>
 					</Card>
 				</div>
+				<LocationSelection
+					show={modalShow}
+					onHide={() => setModalShow(false)}
+				/>
 			</div>
 		</>
 	);
