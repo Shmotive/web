@@ -328,15 +328,15 @@ export default function LandingPage() {
         <div className="card-container">
           <Image className="landing-logo" src={Logo} prefix="" />
           <Card className="card" border="dark">
+            <div className="button-wrapper">
+              {isLoggedIn && (
+                <Button className="sign-out" onClick={signOut}>
+                  Sign out
+                </Button>
+              )}
+            </div>
             <Card.Body className="card-body">
               <div className="card-header">
-                <div className="button-wrapper">
-                  {isLoggedIn && (
-                    <Button className="sign-out" onClick={signOut}>
-                      Sign out
-                    </Button>
-                  )}
-                </div>
                 <Card.Title className="whats-the-text">
                   What's the <span className="orangeText">Motive</span>?
                 </Card.Title>
