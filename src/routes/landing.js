@@ -443,13 +443,6 @@ export default function LandingPage() {
           show={modalShow}
           onHide={() => setModalShow(false)}
         />
-        <button
-          onClick={() => {
-            navigateToLobby(12);
-          }}
-        >
-          Yahoiaehro
-        </button>
       </div>
     </>
   );

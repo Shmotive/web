@@ -15,7 +15,7 @@ import Toasts from "../components/errors/Toasts";
 import ResultCard from "../components/results/ResultCard";
 import ReactConfetti from "react-confetti";
 
-const data = [
+const sample_data = [
   { name: "A longer title", id: "a", category: "DINING" },
   { name: "Vklalkal", id: "b", category: "ACTIVITY" },
   { name: "c", id: "c", category: "CUSTOM" },
@@ -35,7 +35,7 @@ export default function ResultsPage() {
   const location = useLocation();
   const passedState = location.state;
   const { code, uuid } = passedState;
-  const [resultsArray, setResultsArray] = useState(data);
+  const [resultsArray, setResultsArray] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const navigate = useNavigate();
 
