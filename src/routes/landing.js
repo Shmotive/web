@@ -33,9 +33,15 @@ export default function LandingPage() {
   function navigateToLobby(code) {
     const name = userName;
     navigate("/lobby/" + code, {
-      state: { name, code, uuid: firebaseAuth.currentUser.uid },
+      state: { name: "Wub", code, uuid: "wubabooo" },
     });
   }
+  // function navigateToLobby(code) {
+  //   const name = userName;
+  //   navigate("/lobby/" + code, {
+  //     state: { name, code, uuid: firebaseAuth.currentUser.uid },
+  //   });
+  // }
 
   function signOut() {
     setIsLoggedIn(false);
@@ -436,6 +442,13 @@ export default function LandingPage() {
           show={modalShow}
           onHide={() => setModalShow(false)}
         />
+        <button
+          onClick={() => {
+            navigateToLobby(12);
+          }}
+        >
+          Yahoiaehro
+        </button>
       </div>
     </>
   );
