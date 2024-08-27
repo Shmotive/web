@@ -13,6 +13,7 @@ import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
 import Toasts from "../components/errors/Toasts";
 import ResultCard from "../components/results/ResultCard";
+import ReactConfetti from "react-confetti";
 
 const data = [
   { name: "A longer title", id: "a", category: "DINING" },
@@ -70,6 +71,7 @@ export default function ResultsPage() {
   return (
     <>
       <div className="main-container" style={{}}>
+        <ReactConfetti colors={["#f56e60"]} />
         <Button className="homebutton" onClick={handleOnClick}>
           Back to Homepage
         </Button>
