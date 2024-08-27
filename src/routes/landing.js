@@ -1,23 +1,22 @@
-import "../assets/css/landing.css";
-import Logo from "../assets/logo.svg";
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import Card from "react-bootstrap/Card";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import { Modal, ModalBody } from "react-bootstrap";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import {
   deleteUser,
   onAuthStateChanged,
   signInAnonymously,
 } from "@firebase/auth";
-import { FormLabel, Image } from "react-bootstrap";
-import { useMutation, useLazyQuery } from "@apollo/client";
-import { CREATE_USER, CREATE_LOBBY, JOIN_LOBBY } from "../mutations";
-import { DEBUG_GET_USER } from "../queries";
-import { auth as firebaseAuth } from "../firebase-config";
+import React, { useEffect, useState } from "react";
+import { FormLabel, Image, Modal, ModalBody } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
+import Form from "react-bootstrap/Form";
+import { useNavigate } from "react-router-dom";
+import "../assets/css/landing.css";
+import Logo from "../assets/logo.svg";
 import Toasts from "../components/errors/Toasts";
 import PlaceAutocomplete from "../components/landing/PlaceAutocomplete";
+import { auth as firebaseAuth } from "../firebase-config";
+import { CREATE_LOBBY, CREATE_USER, JOIN_LOBBY } from "../mutations";
+import { DEBUG_GET_USER } from "../queries";
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -29,6 +28,7 @@ export default function LandingPage() {
   const [isNavigating, setIsNavigating] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [alerts, setAlerts] = useState([]);
+  const [editLocation, setEditLocation] = useState(true);
 
   function navigateToLobby(code) {
     const name = userName;
@@ -283,35 +283,48 @@ export default function LandingPage() {
       >
         <Modal.Header className="modal-header">
           <Modal.Title id="contained-modal-title-vcenter">
-            Location Selection
+            Select a Location
           </Modal.Title>
         </Modal.Header>
         <ModalBody>
-          <div className="modal-body-text">
-            {!selectedPlace
-              ? `Please select a valid location`
-              : `Selected Location: ${selectedPlace.name}`}
-          </div>
-          <div className="autocomplete-control">
-            <PlaceAutocomplete
-              onPlaceSelect={setSelectedPlace}
-              alerts={alerts}
-              setAlerts={setAlerts}
-            />
-          </div>
+          {selectedPlace && (
+            <div className="modal-body-text">
+              {`You selected: ${selectedPlace.name}`}
+
+              {!editLocation && (
+                <div
+                  className="edit-location-text"
+                  onClick={() => setEditLocation(true)}
+                >
+                  Not right? Change your selection.
+                </div>
+              )}
+            </div>
+          )}
+          {(!selectedPlace || editLocation) && (
+            <div className="autocomplete-control">
+              <PlaceAutocomplete
+                onPlaceSelect={(e) => {
+                  setSelectedPlace(e);
+                  setEditLocation(false);
+                }}
+                alerts={alerts}
+                setAlerts={setAlerts}
+              />
+            </div>
+          )}
           <div className="modal-body-text-2">
-            Tip: We'll use your selected location to recommend your lobby some
-            activities!
+            We'll use your selected location to recommend some activities!
           </div>
         </ModalBody>
         <Modal.Footer>
-          <Button onClick={props.onHide} variant="secondary" size="sm">
+          <Button onClick={props.onHide} variant="secondary" size="md">
             Cancel
           </Button>
           <Button
             onClick={modalSubmitHandler}
             className="location-modal-button"
-            size="sm"
+            size="md"
             type="button"
           >
             Confirm Location & Create Lobby

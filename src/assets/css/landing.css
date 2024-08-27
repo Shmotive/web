@@ -197,6 +197,7 @@
   text-align: center;
   margin-top: 0.1rem;
   margin-bottom: 0.6rem;
+  font-size: 24px;
 }
 
 .autocomplete-container {
@@ -204,15 +205,28 @@
   justify-content: center;
   align-items: center;
   margin-bottom: 1.5rem;
+  padding: 2px;
 }
 
 .autocomplete-control {
   width: 100%;
 }
 
+.autocomplete-input {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #828383;
+  border-radius: 8px;
+  font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto,
+    "Helvetica Neue", sans-serif;
+  font-size: 16px;
+  padding: 6px 12px;
+  font-weight: 400;
+  width: 50%;
+}
+
 .location-modal-button {
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  border-radius: 3px;
   background-color: #f46f60;
   border: none;
   color: white;
@@ -234,9 +248,21 @@
   text-align: center;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
-  font-weight: 1000;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.6);
 }
 
 .pac-container {
   z-index: 1056 !important;
+}
+
+.edit-location-text {
+  color: #f46f6077;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.edit-location-text:hover {
+  color: #f46f60;
+  cursor: pointer;
 }
