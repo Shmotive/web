@@ -32,7 +32,7 @@ export default function LandingPage() {
 
   function navigateToLobby(code) {
     const name = userName;
-    navigate("/lobby/" + code, {
+    navigate("/voting/" + code, {
       state: { name: "Wub", code, uuid: "wubabooo" },
     });
   }

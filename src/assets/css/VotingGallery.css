@@ -1,19 +1,21 @@
+background-color: linear-gradient(to bottom, #f28d82, #9d2113);
 .swiper {
-    width: 100%;
-    height: 100%;
-  }
-  
+  width: 100%;
+  height: 100%;
+}
+
 .swiper-slide {
   text-align: center;
   font-size: 18px;
-  background: gray;
+  background: rgb(178, 176, 176);
+  border: 2px solid black;
 
   /* Center slide text vertically */
   display: flex;
   justify-content: center;
   align-items: center;
 }
-  
+
 .swiper-slide img {
   display: block;
   width: 100%;
@@ -27,15 +29,19 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.7); /* Adjust color and opacity for blur effect */
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.7
+  ); /* Adjust color and opacity for blur effect */
   display: flex;
   justify-content: center;
-  align-items:center;
+  align-items: center;
   font-size: 24px; /* Adjust as needed */
   z-index: 1100; /* Above the buttons */
   backdrop-filter: blur(5px); /* This will give the blur effect */
 }
- 
 
 /* Container flex styling */
 
@@ -45,8 +51,9 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  /* background: linear-gradient(#f28d8277, #9d2113aa); */
+  background-color: #f2a9a1e3;
 }
-
 .left-container {
   flex: 1;
 }
@@ -63,7 +70,7 @@
 
 .middle-container-1 {
   display: flex;
-  flex: 1
+  flex: 1;
 }
 
 .middle-container-2 {
@@ -71,7 +78,7 @@
   flex: 4;
   justify-content: center;
   width: 30vw;
-  height: 80vh
+  height: 80vh;
 }
 
 .swiper-slide-title {
@@ -81,8 +88,14 @@
   width: 40%;
   text-align: center;
   padding: 25px 0; /* Adjust padding as needed */
-  background: rgba(0, 0, 0, 0.5); /* Optional: Adds a semi-transparent overlay for better readability */
+  background: rgba(
+    0,
+    0,
+    0,
+    0.5
+  ); /* Optional: Adds a semi-transparent overlay for better readability */
   font-size: 24px; /* Adjust font size as needed */
+  backdrop-filter: blur(5px);
   font-weight: bold;
   color: white;
   border-radius: 20px;
@@ -96,4 +109,3 @@
 .right-container {
   flex: 1;
 }
-
