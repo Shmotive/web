@@ -17,6 +17,7 @@ import PlaceAutocomplete from "../components/landing/PlaceAutocomplete";
 import { auth as firebaseAuth } from "../firebase-config";
 import { CREATE_LOBBY, CREATE_USER, JOIN_LOBBY } from "../mutations";
 import { DEBUG_GET_USER } from "../queries";
+import ResultCard from "../components/results/ResultCard";
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ export default function LandingPage() {
 
   function navigateToLobby(code) {
     const name = userName;
-    navigate("/voting/" + code, {
+    navigate("/results/" + code, {
       state: { name: "Wub", code, uuid: "wubabooo" },
     });
   }

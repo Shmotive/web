@@ -120,13 +120,8 @@ export default function VotingPage() {
   return (
     <div width={"100vw"} height={"100vh"} className="voting-background">
       <Toasts alerts={alerts} />
-      {/* <VotingGallery pool={recommendationsArray} uuid={uuid} code={code} alerts={alerts} setAlerts={setAlerts} /> */}
       <VotingGallery
-        pool={[
-          { id: "a", name: "a", category: "ACTIVITY" },
-          { id: "b", name: "b", category: "CUSTOM" },
-          { id: "c", name: "c", category: "ACTIVITY" },
-        ]}
+        pool={recommendationsArray}
         uuid={uuid}
         code={code}
         alerts={alerts}
