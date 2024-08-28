@@ -1,15 +1,24 @@
-import { Button, Modal, ModalBody } from "react-bootstrap";
-import React, { useCallback, useEffect, useState, useRef, useMemo } from "react";
 import { useMapsLibrary } from "@vis.gl/react-google-maps";
-import debounce from 'lodash.debounce';
+import debounce from "lodash.debounce";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
-    // given template from google, minus debouncer
-  
-export default function PlaceAutocomplete({ onPlaceSelect, alerts, setAlerts }) {
+// given template from google, minus debouncer
+
+export default function PlaceAutocomplete({
+  onPlaceSelect,
+  alerts,
+  setAlerts,
+}) {
   const [placeAutocomplete, setPlaceAutocomplete] = useState(null);
   const inputRef = useRef(null);
   const places = useMapsLibrary("places");
-  const [disabledInput, setDisabledInput] = useState(false)
+  const [disabledInput, setDisabledInput] = useState(false);
 
   useEffect(() => {
     if (!places || !inputRef.current) return;
@@ -23,17 +32,21 @@ export default function PlaceAutocomplete({ onPlaceSelect, alerts, setAlerts }) 
 
   const handlePlaceChanged = useCallback(() => {
     if (!placeAutocomplete) {
-      setAlerts([...alerts, {
-				variant: 'danger',
-				title: 'Lobby Creation Error',
-				desc: 'Unable to load Google API! Please try again.'
-			}])
+      setAlerts([
+        ...alerts,
+        {
+          variant: "danger",
+          title: "Lobby Creation Error",
+          desc: "Unable to load Google API! Please try again.",
+        },
+      ]);
       setDisabledInput(true);
-      
+
       return;
     }
     onPlaceSelect(placeAutocomplete.getPlace());
-    console.log(placeAutocomplete.getPlace());  
+    // // uncomment for testing
+    // console.log(placeAutocomplete.getPlace());
   }, [onPlaceSelect, placeAutocomplete]);
 
   const debouncedHandlePlaceChanged = useMemo(
@@ -44,16 +57,24 @@ export default function PlaceAutocomplete({ onPlaceSelect, alerts, setAlerts }) 
   useEffect(() => {
     if (!placeAutocomplete) return;
 
-    const listener = placeAutocomplete.addListener("place_changed", debouncedHandlePlaceChanged);
+    const listener = placeAutocomplete.addListener(
+      "place_changed",
+      debouncedHandlePlaceChanged
+    );
 
     return () => {
       window.google.maps.event.removeListener(listener);
     };
   }, [onPlaceSelect, placeAutocomplete]);
-  
+
   return (
     <div className="autocomplete-container">
-      <input disabled={disabledInput} ref={inputRef} placeholder="Search for locations..."/>
+      <input
+        disabled={disabledInput}
+        ref={inputRef}
+        placeholder="Search for locations..."
+        className="autocomplete-input"
+      />
     </div>
   );
-};
+}

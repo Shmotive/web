@@ -65,16 +65,44 @@
   text-decoration: none;
   color: #f56e60;
 }
+
 .room-info {
   align-items: center;
   justify-content: center;
   text-align: center;
+  position: relative;
+  font-weight: 600;
+  font-size: 20px;
 }
 
 .lobby-code {
   font-size: 10vh;
   color: #525252;
   font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  margin-top: 1rem;
+  gap: 0.5rem;
+  line-height: 100%;
+}
+
+.lobby-code:hover {
+  color: #f56e60;
+}
+
+.clipboard-feedback {
+  background-color: #dddddd;
+  padding: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 1em;
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
 }
 
 .button-container {
@@ -166,7 +194,7 @@
 }
 
 .suggestion-button {
-  background-color: #F46F60;;
+  background-color: #f46f60;
   border: none;
   color: #ffffff;
   cursor: pointer;

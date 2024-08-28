@@ -1,210 +1,268 @@
 .landingBody {
-    background-image: url('../background_image.png');
-    background-repeat: no-repeat;
-    height: 100vh;
-    background-size: contain;
-    background-position: 25% 50%;
+  background-image: url("../background_image.png");
+  background-repeat: no-repeat;
+  height: 100vh;
+  background-size: contain;
+  background-position: 25% 50%;
 }
 
-.card-container{
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+.card-container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
-.left-col-container{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    flex-basis: 10%;
+.left-col-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-basis: 10%;
 }
 
 .landing-logo {
-    margin-top: 3.0vh;
-    margin-left: 0.5vw; 
-    height: 8vh;
-    width: 8vw;
+  margin-top: 3vh;
+  margin-left: 0.5vw;
+  height: 8vh;
+  width: 8vw;
 }
 
 .card {
-    
-    backdrop-filter: blur(10px);
-    background-color: #FFFFFF95;
-    margin: 0;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    height: 100vh;
-    overflow: auto;
-} 
+  backdrop-filter: blur(10px);
+  background-color: #ffffff95;
+  margin: 0;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  height: 100vh;
+  overflow: auto;
+  position: relative;
+}
 
 .card-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 8vh 8vh 2vh 8vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4em;
+  padding: 2em;
+  background: none;
 }
 
 .button-wrapper {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 1rem; 
+  position: absolute;
+  justify-content: center;
+  right: 2em;
 }
 
-
 .sign-out {
-    align-self: flex-end;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
-    border-radius: 30px;
-    background-color: #F46F60;
-    border: none;
-    color: white;
-    padding: 1vh;
+  align-self: flex-end;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+  border-radius: 30px;
+  background-color: #f46f60;
+  border: none;
+  color: white;
+  padding: 1vh;
+  margin-top: 2rem;
+  margin-right: 2rem;
 }
 
 .sign-out:hover {
-    cursor: pointer;
-    background-color: #dddada;
+  cursor: pointer;
+  background-color: #dddada;
 }
 
 .sign-out:active {
-    cursor: pointer;
-    background-color: #dddada;
+  cursor: pointer;
+  background-color: #dddada;
 }
 
 .form-label {
-    display: block;
-    margin-bottom: 0.2rem;
+  display: block;
+  margin-bottom: 0.2rem;
 }
 
 .link-button:hover {
-    color: red;
-    cursor: pointer;
+  color: red;
+  cursor: pointer;
 }
 
 .whats-the-text {
-    font-size: 6vh;
-    font-weight: bold;
-    color: #525252;
-    text-align: left;
-    margin-bottom: 1vh;
-    flex-shrink: 1;
+  font-size: 6vh;
+  font-weight: bold;
+  color: #525252;
+  text-align: left;
+  flex-shrink: 1;
 }
 
 .form-label-2 {
-    display: block;
-    margin-bottom: 0.1rem;
+  display: block;
+  margin-bottom: 0.1rem;
 }
 
-.form-control, .lobby-button {
-    width: 100%;
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
-    margin-top: 0.2rem;
-    margin-bottom: 1rem;
-    padding: 1vh;
+.form-control,
+.lobby-button {
+  width: 100%;
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  margin-top: 0.2rem;
+  margin-bottom: 1rem;
+  padding: 1vh;
 }
 
 .lobby-button {
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
-    border: none;
-    border-radius: 3px;
-    background-color: #F46F60;
-    color: white;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+  border: none;
+  border-radius: 3px;
+  background-color: #f46f60;
+  color: white;
 }
 
 .lobby-button:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .small {
-    display: block;
-    text-align: center;
-    margin-top: 0.1rem;
-    margin-bottom: 0.1rem;
+  display: block;
+  text-align: center;
+  margin-top: 0.1rem;
+  margin-bottom: 0.1rem;
 }
 
 .link-button-container {
-    text-align: center;
+  text-align: center;
 }
 
 .link-button {
-    background-color: transparent;
-    border-color: transparent;
-    text-decoration: none;
-    box-shadow: none;
+  background-color: transparent;
+  border-color: transparent;
+  text-decoration: none;
+  box-shadow: none;
 }
 
 .create-group-text {
-    font-size: 4vh;
-    font-weight: bold;
-    color: #525252;
-    text-align: left;
-    flex-shrink: 2;
-    
+  font-size: 4vh;
+  font-weight: bold;
+  color: #525252;
+  text-align: left;
+  flex-shrink: 2;
+}
+
+.card-header {
+  backdrop-filter: unset;
+  border: none;
+  background: none;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
 }
 
 .help {
-    margin-bottom: 5vh;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  padding: 0;
+  margin: 0;
+  margin-bottom: 5vh;
+  font-size: 2em;
+  color: #525252;
+  font-weight: 600;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
+}
+
+.form-group {
+  width: 80%;
 }
 
 .orangeText {
-    color: #F46F60;
-    flex-shrink: 2;
+  color: #f46f60;
+  flex-shrink: 2;
 }
 
 .modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-body-text {
-    font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto,
+  font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto,
     "Helvetica Neue", sans-serif;
-    text-align: center;
-    margin-top: 0.1rem;
-    margin-bottom: 0.6rem;
+  text-align: center;
+  margin-top: 0.1rem;
+  margin-bottom: 0.6rem;
+  font-size: 24px;
 }
 
 .autocomplete-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 2px;
 }
 
 .autocomplete-control {
-    width: 100%;
+  width: 100%;
+}
+
+.autocomplete-input {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #828383;
+  border-radius: 8px;
+  font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto,
+    "Helvetica Neue", sans-serif;
+  font-size: 16px;
+  padding: 6px 12px;
+  font-weight: 400;
+  width: 50%;
 }
 
 .location-modal-button {
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-    border-radius: 3px;
-    background-color: #F46F60;
-    border: none;
-    color: white;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  background-color: #f46f60;
+  border: none;
+  color: white;
 }
 
 .location-modal-button:hover {
-    cursor: pointer;
-    background-color: #dddada;
+  cursor: pointer;
+  background-color: #dddada;
 }
 
 .location-modal-button:active {
-    cursor: pointer;
-    background-color: #dddada;
+  cursor: pointer;
+  background-color: #dddada;
 }
 
 .modal-body-text-2 {
-    font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto,
+  font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto,
     "Helvetica Neue", sans-serif;
-    text-align: center;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    font-weight: 1000;
+  text-align: center;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.6);
 }
 
 .pac-container {
-    z-index: 1056 !important;
-  }
+  z-index: 1056 !important;
+}
 
+.edit-location-text {
+  color: #f46f6077;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.edit-location-text:hover {
+  color: #f46f60;
+  cursor: pointer;
+}
