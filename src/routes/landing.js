@@ -33,16 +33,10 @@ export default function LandingPage() {
 
   function navigateToLobby(code) {
     const name = userName;
-    navigate("/results/" + code, {
-      state: { name: "Wub", code, uuid: "wubabooo" },
+    navigate("/lobby/" + code, {
+      state: { name, code, uuid: firebaseAuth.currentUser.uid },
     });
   }
-  // function navigateToLobby(code) {
-  //   const name = userName;
-  //   navigate("/lobby/" + code, {
-  //     state: { name, code, uuid: firebaseAuth.currentUser.uid },
-  //   });
-  // }
 
   function signOut() {
     setIsLoggedIn(false);
