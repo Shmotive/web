@@ -8,29 +8,11 @@ import {
 } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_RESULTS } from "../queries";
-import Badge from "react-bootstrap/Badge";
 import Button from "react-bootstrap/Button";
-import ListGroup from "react-bootstrap/ListGroup";
 import Toasts from "../components/errors/Toasts";
 import ResultCard from "../components/results/ResultCard";
 import ReactConfetti from "react-confetti";
 
-const sample_data = [
-  { name: "A longer title", id: "a", category: "DINING" },
-  { name: "Vklalkal", id: "b", category: "ACTIVITY" },
-  { name: "c", id: "c", category: "CUSTOM" },
-  { name: "d", id: "d", category: "ACTIVITY" },
-  { name: "e", id: "e", category: "CUSTOM" },
-  { name: "f", id: "f", category: "ACTIVITY" },
-  { name: "g", id: "g", category: "CUSTOM" },
-  { name: "aasdfklj", id: "h", category: "DINING" },
-  { name: "basdfasd; aksjdf;laksdj adfkls ", id: "i", category: "ACTIVITY" },
-  { name: "c", id: "j", category: "CUSTOM" },
-  { name: "d", id: "k", category: "ACTIVITY" },
-  { name: "e", id: "not", category: "CUSTOM" },
-  { name: "f", id: "l", category: "ACTIVITY" },
-  { name: "g", id: "m", category: "CUSTOM" },
-];
 export default function ResultsPage() {
   const location = useLocation();
   const passedState = location.state;
@@ -47,7 +29,7 @@ export default function ResultsPage() {
 
   useEffect(() => {
     if (resultsData) {
-      console.log(resultsData);
+      // console.log(resultsData);
       setResultsArray(resultsData.getLiveLobby.picks);
     }
     if (resultsError) {

@@ -33,25 +33,23 @@ export default function LobbyPage() {
     }
   );
 
-  const [addSuggestion, { _reset: addSuggestionReset }] =
-    useMutation(ADD_SUGGESTION);
+  const [addSuggestion, { _reset: addSuggestionReset }] = useMutation(ADD_SUGGESTION);
 
-  const {
-    data: lobby_users_subscription,
-    error: lobby_users_error_subscription,
-  } = useSubscription(LOBBY_PAGE_SUBSCRIPTION, {
+  const { data: lobby_users_subscription, error: lobby_users_error_subscription} = useSubscription(
+    LOBBY_PAGE_SUBSCRIPTION,
+    {
     variables: { lobby_code: code, uuid: uuid },
-  });
+    }
+  );
 
   const [startLobby, { _reset: startLobbyReset }] = useMutation(START_LOBBY);
 
-  const [skipSuggestion, { _reset: skipSuggestionReset }] =
-    useMutation(SKIP_SUGGESTION);
+  const [skipSuggestion, { _reset: skipSuggestionReset }] = useMutation(SKIP_SUGGESTION);
 
   useEffect(() => {
     // Change in subscription data: update users and lobby state
     if (lobby_users_subscription) {
-      console.log("LOBBY_USERS_SUBSCRIPTION", lobby_users_subscription);
+      // console.log("LOBBY_USERS_SUBSCRIPTION", lobby_users_subscription);
       setUsers((prev) => {
         const arr = [
           lobby_users_subscription.subscribeToLobby.owner,
@@ -139,7 +137,7 @@ export default function LobbyPage() {
         variables: { uuid: uuid, lobby_code: code, name: inputValue },
       })
         .then((response) => {
-          console.log("ADD SUGGESTION RESPONSE:", response);
+          // console.log("ADD SUGGESTION RESPONSE:", response);
           if (response?.errors) console.log(response.errors);
           if (response?.data) {
             setSubmittedSuggestions((prev) => {

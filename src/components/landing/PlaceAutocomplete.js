@@ -45,7 +45,8 @@ export default function PlaceAutocomplete({
       return;
     }
     onPlaceSelect(placeAutocomplete.getPlace());
-    console.log(placeAutocomplete.getPlace());
+    // // uncomment for testing
+    // console.log(placeAutocomplete.getPlace());
   }, [onPlaceSelect, placeAutocomplete]);
 
   const debouncedHandlePlaceChanged = useMemo(

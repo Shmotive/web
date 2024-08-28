@@ -77,15 +77,15 @@ export default function VotingPage() {
     }
     if (lobbyQueryData) {
       // Combine custom and generated recommendation arrays into one array when the component loads
-      console.log(
-        lobbyQueryData.getLiveLobby.custom_recommendations,
-        lobbyQueryData.getLiveLobby.generated_recommendations
-      );
+      // console.log(
+      //   lobbyQueryData.getLiveLobby.custom_recommendations,
+      //   lobbyQueryData.getLiveLobby.generated_recommendations
+      // );
       let combinedArray =
         lobbyQueryData.getLiveLobby.custom_recommendations.concat(
           lobbyQueryData.getLiveLobby.generated_recommendations
         );
-      console.log(combinedArray);
+      // console.log(combinedArray);
       shuffleArray(combinedArray);
       setRecommendationsArray(combinedArray);
     }
@@ -109,13 +109,13 @@ export default function VotingPage() {
 
       // if subscription returns lobby state as results, this indicates that we should navigate to results page
       if (lobbySubscriptionData?.subscribeToLobby.state === "RESULTS") {
-        console.log("a");
+        // console.log("a");
         navigate("/results/" + code, { state: { code, uuid } });
       }
     }
   }, [lobbySubscriptionData, lobbySubscriptionError]);
 
-  console.log(recommendationsArray, subscriptionData);
+  // console.log(recommendationsArray, subscriptionData);
 
   return (
     <div width={"100vw"} height={"100vh"} className="voting-background">

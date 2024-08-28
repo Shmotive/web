@@ -23,8 +23,8 @@ export default function VotingGallery({ pool, uuid, code, alerts, setAlerts }) {
 
   const [submitVote] = useMutation(SUBMIT_VOTE);
 
-  console.log(pool.length, index);
-  console.log(typeof code);
+  // console.log(pool.length, index);
+  // console.log(typeof code);
 
   function handleSubmit(recommendation, vote) {
     if (index === pool.length - 1) {
@@ -40,7 +40,7 @@ export default function VotingGallery({ pool, uuid, code, alerts, setAlerts }) {
         },
       })
         .then((submitVoteResponse) => {
-          console.log(submitVoteResponse);
+          // console.log(submitVoteResponse);
           const { data: submitVoteData, error: submitVoteError } =
             submitVoteResponse;
 
@@ -72,7 +72,7 @@ export default function VotingGallery({ pool, uuid, code, alerts, setAlerts }) {
     }
   }
 
-  console.log(userVoteResults);
+  // console.log(userVoteResults);
 
   return (
     <div className="full-container">
