@@ -19,3 +19,5 @@ This repository contains the frontend part of the Motive application, built with
 ## Try it out!
 
 Try out the app at -> [whatsthemotive.app](https://whatsthemotive.app)
+
+Last edited: Sep 2024
